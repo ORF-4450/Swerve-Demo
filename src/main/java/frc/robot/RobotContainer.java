@@ -6,9 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.DefaultDriveCommand;
@@ -35,11 +33,17 @@ public class RobotContainer {
     // Left stick Y axis -> forward and backwards movement
     // Left stick X axis -> left and right movement
     // Right stick X axis -> rotation
+    // Note: X and Y axis on stick is opposite X and Y axis on the WheelSpeeds object.
+    // Wheelspeeds X axis is + down the field away from alliance wall. +Y axis is left
+    // when standing at alliance wall looking down the field.
+    // This is handled here by swapping the inputs. Note that first axis parameter below
+    // is the X wheelspeeds input and the second is Y wheelspeeds input.
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
-            () -> -modifyAxis(m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+            () -> -modifyAxis(m_controller.getLeftY()) * DrivetrainSubsystem.LTD_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_controller.getLeftX()) * DrivetrainSubsystem.LTD_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_controller.getRightX()) * DrivetrainSubsystem.LTD_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+            m_controller
     ));
 
     // Configure the button bindings
@@ -54,7 +58,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Back button zeros the gyroscope
-    new Button(m_controller::getBackButton)
+    new Button(m_controller::getXButton)
             // No requirements because we don't need to interrupt anything
             .whenPressed(m_drivetrainSubsystem::zeroGyroscope);
   }
@@ -70,20 +74,12 @@ public class RobotContainer {
   }
 
   private static double deadband(double value, double deadband) {
-    if (Math.abs(value) > deadband) {
-      if (value > 0.0) {
-        return (value - deadband) / (1.0 - deadband);
-      } else {
-        return (value + deadband) / (1.0 - deadband);
-      }
-    } else {
-      return 0.0;
-    }
+    return Math.abs(value) > deadband ? value : 0.0;
   }
 
   private static double modifyAxis(double value) {
-    // Deadband
-    value = deadband(value, 0.05);
+    // Apply Deadband
+    value = deadband(value, 0.05);  // .05 original
 
     // Square the axis
     value = Math.copySign(value * value, value);
