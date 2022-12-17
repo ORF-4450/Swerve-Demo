@@ -27,6 +27,7 @@ public class NeoSteerConfiguration<EncoderConfiguration>
     public boolean equals(Object o) 
     {
         if (this == o) return true;
+        
         if (o == null || getClass() != o.getClass()) return false;
 
         NeoSteerConfiguration<?> that = (NeoSteerConfiguration<?>) o;

@@ -9,4 +9,6 @@ public interface SteerController
     double getStateAngle();
 
     void stop();
+
+    void setPidConstants(double proportional, double integral, double derivative);
 }

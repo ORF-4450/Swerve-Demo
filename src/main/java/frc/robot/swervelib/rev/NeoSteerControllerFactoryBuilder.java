@@ -79,6 +79,8 @@ public final class NeoSteerControllerFactoryBuilder
 
             CANSparkMax motor = new CANSparkMax(steerConfiguration.getMotorPort(), CANSparkMaxLowLevel.MotorType.kBrushless);
 
+            motor.restoreFactoryDefaults(); // 4450
+
             checkNeoError(motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 100), "Failed to set periodic status frame 0 rate");
             checkNeoError(motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20), "Failed to set periodic status frame 1 rate");
             checkNeoError(motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20), "Failed to set periodic status frame 2 rate");
@@ -140,6 +142,14 @@ public final class NeoSteerControllerFactoryBuilder
         public void stop()
         {
             motor.stopMotor();
+        }
+
+        @Override
+        public void setPidConstants(double proportional, double integral, double derivative)
+        {
+            checkNeoError(controller.setP(proportional), "Failed to set NEO PID proportional constant");
+            checkNeoError(controller.setI(integral), "Failed to set NEO PID integral constant");
+            checkNeoError(controller.setD(derivative), "Failed to set NEO PID derivative constant");
         }
 
         @Override

@@ -109,5 +109,11 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
             driveController.stop();
             steerController.stop();
         }
+
+        @Override
+        public void setSteerPidConstants(double proportional, double integral, double derivative)
+        {
+            steerController.setPidConstants(proportional, integral, derivative);
+        }
     }
 }
