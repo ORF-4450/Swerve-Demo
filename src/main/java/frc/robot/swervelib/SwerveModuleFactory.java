@@ -1,6 +1,5 @@
 package frc.robot.swervelib;
 
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
 public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> 
@@ -87,7 +86,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
             // If the difference is greater than 90 deg or less than -90 deg the drive can be inverted so the total
             // movement of the module is less than 90 deg
 
-            if (difference > Math.PI / 2.0 || difference < -Math.PI / 2.0) {
+            if (difference > Math.PI / 2.0 || difference < -Math.PI / 2.0) 
+            {
                 // Only need to add 180 deg here because the target angle will be put back into the range [0, 2pi)
                 steerAngle += Math.PI;
                 driveVoltage *= -1.0;

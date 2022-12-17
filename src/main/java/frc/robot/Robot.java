@@ -8,6 +8,7 @@ import static frc.robot.Constants.*;
 
 import java.io.IOException;
 
+import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +21,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot 
+{
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -30,14 +32,28 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {
+  public void robotInit() 
+  {  
+    LCD.clearAll();
+    
     // Set up our custom logger.
 
     try {
       Util.CustomLogger.setup();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+      //Util.CustomLogger.setup("frc.");
+    } catch (Exception e) { endCompetition(); }
+
+    // Set Java to catch any uncaught exceptions and record them in our log file.
+
+    Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() 
+    {
+      public void uncaughtException(Thread t, Throwable e) 
+      {
+        Util.consoleLog("Uncaught exception from thread " + t);
+        Util.logException(e);
+        endCompetition();
+      }
+    });
 
     // Send program version to the dashboard.
     SmartDashboard.putString("Program", PROGRAM_NAME);
