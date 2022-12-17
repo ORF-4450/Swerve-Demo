@@ -34,8 +34,8 @@ public class DefaultDriveCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
-
+    public void execute() 
+    {
         LCD.printLine(1, "x=%.3f  y=%.3f  sX=%.3f  sY=%.3f  rot=%.3f",
             m_controller.getLeftX(),
             m_controller.getLeftY(),

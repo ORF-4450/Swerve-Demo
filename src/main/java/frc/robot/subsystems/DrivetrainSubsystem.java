@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 //import com.ctre.phoenix.sensors.PigeonIMU;
 import com.kauailabs.navx.frc.AHRS;
-import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
-import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
-import com.swervedrivespecialties.swervelib.SwerveModule;
+import frc.robot.swervelib.Mk4iSwerveModuleHelper;
+import frc.robot.swervelib.SdsModuleConfigurations;
+import frc.robot.swervelib.SwerveModule;
 
 import Team4450.Lib.LCD;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,13 +24,16 @@ import edu.wpi.first.wpilibj.SPI;
 
 import static frc.robot.Constants.*;
 
-public class DrivetrainSubsystem extends SubsystemBase {
+public class DrivetrainSubsystem extends SubsystemBase 
+{
+  public boolean        autoReturnToZero = false;
+
   /**
    * The maximum voltage that will be delivered to the drive motors.
    * <p>
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */
-  public static final double MAX_VOLTAGE = 12.0;
+  public static final double MAX_VOLTAGE = 4.0; //12.0;
 
   // FIXME Measure the drivetrain's maximum velocity or calculate the theoretical.
   //  The formula for calculating the theoretical maximum velocity is:
@@ -51,8 +54,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
           SdsModuleConfigurations.MK4I_L1.getDriveReduction() *
           SdsModuleConfigurations.MK4I_L1.getWheelDiameter() * Math.PI;
 
-  public static final double LTD_VELOCITY_METERS_PER_SECOND = .05; //MAX_VELOCITY_METERS_PER_SECOND / 4;
-
   /**
    * The maximum angular velocity of the robot in radians per second.
    * <p>
@@ -63,8 +64,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
           Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
           
-  public static final double LTD_ANGULAR_VELOCITY_RADIANS_PER_SECOND = .05; // MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND / 4;
-
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
           // Front left
           new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
@@ -220,41 +219,48 @@ public class DrivetrainSubsystem extends SubsystemBase {
   @Override
   public void periodic() 
   {
-    LCD.printLine(3, "max vel=%.3fms ltd=%.3f  max ang vel=%.3frs ltd=%.3f",
+    LCD.printLine(3, "max vel=%.3fms  max ang vel=%.3frs  voltage=%.1f",
         MAX_VELOCITY_METERS_PER_SECOND,
-        LTD_VELOCITY_METERS_PER_SECOND,
         MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-        LTD_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+        MAX_VOLTAGE
     );
 
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, LTD_VELOCITY_METERS_PER_SECOND);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
-    m_frontLeftModule.set(states[0].speedMetersPerSecond / LTD_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
-    m_frontRightModule.set(states[1].speedMetersPerSecond / LTD_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
-    m_backLeftModule.set(states[2].speedMetersPerSecond / LTD_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
-    m_backRightModule.set(states[3].speedMetersPerSecond / LTD_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+//     m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+//     m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+//     m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+//     m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
 
-    /*
-    if (states[0].speedMetersPerSecond < 0.001)
-        m_frontLeftModule.set(0,0);
+    if (autoReturnToZero && states[0].speedMetersPerSecond < 0.01)
+        m_frontLeftModule.stop();
     else
-        m_frontLeftModule.set(states[0].speedMetersPerSecond / LTD_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
         
-    if (states[1].speedMetersPerSecond < 0.001)
-        m_frontRightModule.set(0,0);
+    if (autoReturnToZero && states[1].speedMetersPerSecond < 0.01)
+        m_frontRightModule.stop();
     else
-        m_frontRightModule.set(states[1].speedMetersPerSecond / LTD_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
   
-    if (states[2].speedMetersPerSecond < .001)
-        m_backLeftModule.set(0,0);
+    if (autoReturnToZero && states[2].speedMetersPerSecond < 0.01)
+        m_backLeftModule.stop();
     else
-        m_backLeftModule.set(states[2].speedMetersPerSecond / LTD_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
 
-    if (states[3].speedMetersPerSecond < 0.001)
-        m_backRightModule.set(0,0);
+    if (autoReturnToZero && states[3].speedMetersPerSecond < 0.01)
+        m_backRightModule.stop();
     else
-        m_backRightModule.set(states[3].speedMetersPerSecond / LTD_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
-  */  
+        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+  }
+
+  public void toggleAutoResetToZero()
+  {
+     autoReturnToZero = !autoReturnToZero;
+  }
+
+  public boolean getAutoResetToZero()
+  {
+     return autoReturnToZero;
   }
 }

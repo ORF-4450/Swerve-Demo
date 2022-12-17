@@ -19,8 +19,9 @@ import frc.robot.subsystems.DrivetrainSubsystem;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+public class RobotContainer 
+{
+  // The robot's subsystems and commands are defined here.
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
   private final XboxController m_controller = new XboxController(0);
@@ -28,9 +29,10 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer() {
+  public RobotContainer() 
+  {
     Util.consoleLog();
-    
+
     // Set up the default command for the drivetrain.
     // The controls are for field-oriented driving:
     // Left stick Y axis -> forward and backwards movement
@@ -41,11 +43,12 @@ public class RobotContainer {
     // when standing at alliance wall looking down the field.
     // This is handled here by swapping the inputs. Note that first axis parameter below
     // is the X wheelspeeds input and the second is Y wheelspeeds input.
+
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
-            () -> -modifyAxis(m_controller.getLeftY()) * DrivetrainSubsystem.LTD_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_controller.getLeftX()) * DrivetrainSubsystem.LTD_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_controller.getRightX()) * DrivetrainSubsystem.LTD_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+            () -> -modifyAxis(m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -modifyAxis(m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
             m_controller
     ));
 
@@ -54,16 +57,19 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings.
    */
-  private void configureButtonBindings() {
-    // Back button zeros the gyroscope
-    new Button(m_controller::getXButton)
+  private void configureButtonBindings() 
+  {
+    // Back button zeros the gyroscope.
+    new Button(m_controller::getBackButton)
             // No requirements because we don't need to interrupt anything
             .whenPressed(m_drivetrainSubsystem::zeroGyroscope);
+
+    // Start button toggles autoRreturnToZero mode.
+    new Button(m_controller::getStartButton)
+            // No requirements because we don't need to interrupt anything
+            .whenPressed(m_drivetrainSubsystem::toggleAutoResetToZero);
   }
 
   /**
@@ -71,21 +77,24 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand()
+  {
     // An ExampleCommand will run in autonomous
     return new InstantCommand();
   }
 
-  private static double deadband(double value, double deadband) {
+  private static double deadband(double value, double deadband) 
+  {
     return Math.abs(value) > deadband ? value : 0.0;
   }
 
-  private static double modifyAxis(double value) {
+  private static double modifyAxis(double value) 
+  {
     // Apply Deadband
     value = deadband(value, 0.05);  // .05 original
 
     // Square the axis
-    value = Math.copySign(value * value, value);
+    //value = Math.copySign(value * value, value);
 
     return value;
   }
