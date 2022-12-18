@@ -45,8 +45,8 @@ public class DefaultDriveCommand extends CommandBase {
         );
 
         LCD.printLine(2, "gyro=%.3f  yaw=%.3f",
-            m_drivetrainSubsystem.getGyroscopeRotation().getDegrees(),
-            m_drivetrainSubsystem.getGyroScopeYaw()
+            m_drivetrainSubsystem.getGyroRotation2d().getDegrees(),
+            m_drivetrainSubsystem.getGyroYaw()
         );
 
         // You can use `new ChassisSpeeds(...)` for robot-oriented movement instead of field-oriented movement
@@ -55,7 +55,7 @@ public class DefaultDriveCommand extends CommandBase {
                         m_translationXSupplier.getAsDouble(),
                         m_translationYSupplier.getAsDouble(),
                         m_rotationSupplier.getAsDouble(),
-                        m_drivetrainSubsystem.getGyroscopeRotation()
+                        m_drivetrainSubsystem.getGyroRotation2d()
                 )
         );
     }

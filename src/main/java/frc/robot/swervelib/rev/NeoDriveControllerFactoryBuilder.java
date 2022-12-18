@@ -104,5 +104,11 @@ public final class NeoDriveControllerFactoryBuilder
         {
             motor.stopMotor();
         }
+
+        @Override
+        public RelativeEncoder getEncoder() 
+        {
+            return encoder;
+        }
     }
 }

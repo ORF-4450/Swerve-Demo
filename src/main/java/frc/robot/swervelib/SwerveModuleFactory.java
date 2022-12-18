@@ -1,5 +1,9 @@
 package frc.robot.swervelib;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
 public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> 
@@ -46,6 +50,10 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
     {
         private final DriveController driveController;
         private final SteerController steerController;
+
+        private Translation2d         translation2d;
+        private double                actualAngleDegrees;
+        private Pose2d                pose;
 
         private ModuleImplementation(DriveController driveController, SteerController steerController) 
         {
@@ -115,5 +123,58 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         {
             steerController.setPidConstants(proportional, integral, derivative);
         }
+
+        @Override
+        public void setTranslation2d(Translation2d translation) 
+        {
+            translation2d = translation;            
+        }
+
+        @Override
+        public Translation2d getTranslation2d() 
+        {
+            return translation2d;
+        }
+        
+        @Override
+        public double getHeadingDegrees() 
+        {
+            if (RobotBase.isReal())
+                return steerController.getMotorEncoder().getPosition();
+            else
+                return actualAngleDegrees;
+        }
+
+        @Override
+        public Rotation2d getHeadingRotation2d() 
+        {
+            return Rotation2d.fromDegrees(getHeadingDegrees());
+        }
+
+        @Override
+        public void setModulePose(Pose2d pose) 
+        {
+            this.pose = pose;
+        }
+
+        @Override
+        public Pose2d getPose()
+        {
+            return pose;
+        }
+
+        @Override     
+        public void resetAngleToAbsolute() 
+        {
+            double angle = steerController.getAbsoluteEncoder().getAbsoluteAngle() - m_turningEncoderOffset;
+            steerController.getMotorEncoder().setPosition(angle);
+        }
+
+        @Override
+        public void resetEncoders() 
+        {
+            driveController.getEncoder().setPosition(0);
+            steerController.getMotorEncoder().setPosition(0);
+        }
     }
-}
+} 

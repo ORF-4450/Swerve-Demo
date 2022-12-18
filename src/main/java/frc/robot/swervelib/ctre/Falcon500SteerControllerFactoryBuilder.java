@@ -3,6 +3,8 @@ package frc.robot.swervelib.ctre;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.revrobotics.RelativeEncoder;
+
 import frc.robot.swervelib.*;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
@@ -267,6 +269,18 @@ public final class Falcon500SteerControllerFactoryBuilder
             // checkNeoError(controller.setP(proportional), "Failed to set NEO PID proportional constant");
             // checkNeoError(controller.setI(integral), "Failed to set NEO PID integral constant");
             // checkNeoError(controller.setD(derivative), "Failed to set NEO PID derivative constant");
+        }
+
+        @Override
+        public RelativeEncoder getMotorEncoder() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public AbsoluteEncoder getAbsoluteEncoder() {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
 }

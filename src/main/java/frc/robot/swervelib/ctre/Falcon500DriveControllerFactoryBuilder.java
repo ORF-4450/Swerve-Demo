@@ -6,6 +6,8 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.revrobotics.RelativeEncoder;
+
 import frc.robot.swervelib.DriveController;
 import frc.robot.swervelib.DriveControllerFactory;
 import frc.robot.swervelib.ModuleConfiguration;
@@ -85,7 +87,8 @@ public final class Falcon500DriveControllerFactoryBuilder {
         }
     }
 
-    private class ControllerImplementation implements DriveController {
+    private class ControllerImplementation implements DriveController 
+    {
         private final TalonFX motor;
         private final double sensorVelocityCoefficient;
         private final double nominalVoltage = hasVoltageCompensation() ? Falcon500DriveControllerFactoryBuilder.this.nominalVoltage : 12.0;
@@ -109,6 +112,12 @@ public final class Falcon500DriveControllerFactoryBuilder {
         public void stop()
         {
             motor.set(TalonFXControlMode.PercentOutput, 0);
+        }
+
+        @Override
+        public RelativeEncoder getEncoder() {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
 }

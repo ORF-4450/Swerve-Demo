@@ -1,5 +1,7 @@
 package frc.robot.swervelib;
 
+import com.revrobotics.RelativeEncoder;
+
 public interface SteerController 
 {
     double getReferenceAngle();
@@ -11,4 +13,8 @@ public interface SteerController
     void stop();
 
     void setPidConstants(double proportional, double integral, double derivative);
+
+    public RelativeEncoder getMotorEncoder();
+
+    public AbsoluteEncoder getAbsoluteEncoder();
 }

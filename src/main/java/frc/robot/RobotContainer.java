@@ -64,7 +64,7 @@ public class RobotContainer
     // Back button zeros the gyroscope.
     new Button(m_controller::getBackButton)
             // No requirements because we don't need to interrupt anything
-            .whenPressed(m_drivetrainSubsystem::zeroGyroscope);
+            .whenPressed(m_drivetrainSubsystem::zeroGyro);
 
     // Start button toggles autoRreturnToZero mode.
     new Button(m_controller::getStartButton)
