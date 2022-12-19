@@ -117,7 +117,7 @@ public class DrivetrainSubsystem extends SubsystemBase
     new Thread(() -> {
       try {
         Thread.sleep(1000);
-        zeroGyro();
+        //zeroGyro();
       } catch (Exception e) { }
     }).start();
 

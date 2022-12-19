@@ -77,13 +77,13 @@ public final class xMk3SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
-                steerOffset,
                 container,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
-                )
+                ),
+                steerOffset
         );
     }
 
@@ -134,12 +134,12 @@ public final class xMk3SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
-                steerOffset,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
-                )
+                ),
+                steerOffset
         );
     }
 
@@ -190,13 +190,13 @@ public final class xMk3SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
-                steerOffset,
                 container,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
-                )
+                    ),
+                steerOffset
         );
     }
 
@@ -247,12 +247,12 @@ public final class xMk3SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
-                steerOffset,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
-                )
+                ),
+                steerOffset
         );
     }
 
@@ -303,13 +303,13 @@ public final class xMk3SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
-                steerOffset,
                 container,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
-                )
+                ),
+                steerOffset
         );
     }
 
@@ -360,12 +360,12 @@ public final class xMk3SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
-                steerOffset,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
-                )
+                ),
+                steerOffset
         );
     }
 
@@ -416,13 +416,13 @@ public final class xMk3SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
-                steerOffset,
                 container,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
-                )
+                ),
+                steerOffset
         );
     }
 
@@ -473,12 +473,12 @@ public final class xMk3SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
-                steerOffset,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
-                )
+                ),
+                steerOffset
         );
     }
 

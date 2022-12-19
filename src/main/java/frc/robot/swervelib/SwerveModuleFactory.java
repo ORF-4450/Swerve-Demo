@@ -24,7 +24,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         this.steerControllerFactory = steerControllerFactory;
     }
 
-    public SwerveModule create(double steerOffset, DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration) 
+    public SwerveModule create(DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration, 
+                               double steerOffset) 
     {
         var driveController = driveControllerFactory.create(driveConfiguration, moduleConfiguration);
         var steerController = steerControllerFactory.create(steerConfiguration, moduleConfiguration);
@@ -32,7 +33,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         return new ModuleImplementation(driveController, steerController, steerOffset);
     }
 
-    public SwerveModule create(double steerOffset, ShuffleboardLayout container, DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration)
+    public SwerveModule create(ShuffleboardLayout container, DriveConfiguration driveConfiguration, 
+                               SteerConfiguration steerConfiguration, double steerOffset)
     {
         var driveController = driveControllerFactory.create(
                 container,

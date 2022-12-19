@@ -6,8 +6,6 @@ package frc.robot;
 
 import static frc.robot.Constants.*;
 
-import java.io.IOException;
-
 import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -57,6 +55,8 @@ public class Robot extends TimedRobot
 
     // Send program version to the dashboard.
     SmartDashboard.putString("Program", PROGRAM_NAME);
+
+    Util.consoleLog(PROGRAM_NAME);
 
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
