@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.swervelib.DriveController;
@@ -115,9 +116,22 @@ public final class Falcon500DriveControllerFactoryBuilder {
         }
 
         @Override
-        public RelativeEncoder getEncoder() {
+        public RelativeEncoder getEncoder() 
+        {
             // TODO Auto-generated method stub
             return null;
+        }
+
+        @Override
+        public CANSparkMax getMotorNeo() 
+        {
+            return null;
+        }
+
+        @Override
+        public TalonFX getMotor500() 
+        {
+            return motor;
         }
     }
 }

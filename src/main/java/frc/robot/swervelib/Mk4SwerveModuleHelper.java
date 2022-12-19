@@ -22,7 +22,7 @@ public final class Mk4SwerveModuleHelper
     {
         return new Falcon500SteerControllerFactoryBuilder()
                 .withVoltageCompensation(configuration.getNominalVoltage())
-                .withPidConstants(0.2, 0.0, 0.1)
+                .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD())
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .build(new CanCoderFactoryBuilder()
                         .withReadingUpdatePeriod(100)
@@ -41,7 +41,7 @@ public final class Mk4SwerveModuleHelper
     {
         return new NeoSteerControllerFactoryBuilder()
                 .withVoltageCompensation(configuration.getNominalVoltage())
-                .withPidConstants(0.01, 0.0, 0.001) // PID parms customized by 4450.
+                .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD()) // PID parms customized by 4450.
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .build(new CanCoderFactoryBuilder()
                         .withReadingUpdatePeriod(100)
@@ -75,6 +75,7 @@ public final class Mk4SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
+                steerOffset,
                 container,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
@@ -131,6 +132,7 @@ public final class Mk4SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
+                steerOffset,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
                         steerMotorPort,
@@ -186,6 +188,7 @@ public final class Mk4SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
+                steerOffset,
                 container,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
@@ -242,6 +245,7 @@ public final class Mk4SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
+                steerOffset,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
                         steerMotorPort,
@@ -297,6 +301,7 @@ public final class Mk4SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
+                steerOffset,
                 container,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
@@ -353,6 +358,7 @@ public final class Mk4SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
+                steerOffset,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
                         steerMotorPort,
@@ -408,6 +414,7 @@ public final class Mk4SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
+                steerOffset,
                 container,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
@@ -464,6 +471,7 @@ public final class Mk4SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
+                steerOffset,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
                         steerMotorPort,

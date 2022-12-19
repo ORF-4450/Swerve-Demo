@@ -1,5 +1,6 @@
 package frc.robot.swervelib.rev;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
@@ -109,6 +110,18 @@ public final class NeoDriveControllerFactoryBuilder
         public RelativeEncoder getEncoder() 
         {
             return encoder;
+        }
+
+        @Override
+        public CANSparkMax getMotorNeo() 
+        {
+            return motor;
+        }
+
+        @Override
+        public TalonFX getMotor500() 
+        {
+            return null;
         }
     }
 }

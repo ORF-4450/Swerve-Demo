@@ -1,5 +1,7 @@
 package frc.robot.swervelib.ctre;
 
+import java.util.concurrent.atomic.DoubleAdder;
+
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
@@ -45,7 +47,7 @@ public class CanCoderFactoryBuilder
 
     private static class EncoderImplementation implements AbsoluteEncoder 
     {
-        private final CANCoder encoder;
+        private final CANCoder  encoder;
 
         private EncoderImplementation(CANCoder encoder) 
         {

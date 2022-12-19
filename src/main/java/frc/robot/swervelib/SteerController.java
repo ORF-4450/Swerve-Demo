@@ -17,4 +17,6 @@ public interface SteerController
     public RelativeEncoder getMotorEncoder();
 
     public AbsoluteEncoder getAbsoluteEncoder();
+
+    //public double getAbsoluteOffset();
 }

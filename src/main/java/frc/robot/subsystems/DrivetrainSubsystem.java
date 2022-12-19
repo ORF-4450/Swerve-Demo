@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.unmanaged.Unmanaged;
 //import com.ctre.phoenix.sensors.PigeonIMU;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.REVPhysicsSim;
+
 import frc.robot.swervelib.Mk4iSwerveModuleHelper;
 import frc.robot.swervelib.SdsModuleConfigurations;
 import frc.robot.swervelib.SwerveModule;
@@ -25,6 +27,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
@@ -35,7 +39,7 @@ public class DrivetrainSubsystem extends SubsystemBase
 {
   public boolean        autoReturnToZero = false;
 
-  private SimDouble     m_simAngle; // navx sim
+  private SimDouble     simAngle; // navx sim
 
   /**
    * The maximum voltage that will be delivered to the drive motors.
@@ -102,6 +106,8 @@ public class DrivetrainSubsystem extends SubsystemBase
       VecBuilder.fill(0.05),
       VecBuilder.fill(0.1, 0.1, 0.1));
 
+  private final Field2d     field2d = new Field2d();
+
   public DrivetrainSubsystem() 
   {
     // This thread will wait a bit and then reset the gyro while this constructor
@@ -116,15 +122,15 @@ public class DrivetrainSubsystem extends SubsystemBase
     }).start();
 
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-    
-    resetModuleEncoders();
 
     if (RobotBase.isSimulation()) 
     {
       var dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
 
-      m_simAngle = new SimDouble((SimDeviceDataJNI.getSimValueHandle(dev, "Yaw")));
+      simAngle = new SimDouble((SimDeviceDataJNI.getSimValueHandle(dev, "Yaw")));
     }
+
+    SmartDashboard.putData("Field2d", field2d);
 
     // There are 4 methods you can call to create your swerve modules.
     // The method you use depends on what motors you are using.
@@ -202,6 +208,8 @@ public class DrivetrainSubsystem extends SubsystemBase
     );
 
     m_backRightModule.setTranslation2d(new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
+    
+    resetModuleEncoders();
   }
 
   /**
@@ -284,6 +292,8 @@ public class DrivetrainSubsystem extends SubsystemBase
         m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
 
     updateOdometry(states);
+
+    field2d.setRobotPose(getPoseMeters());
   }
 
   public void updateOdometry(SwerveModuleState[] states)
@@ -325,6 +335,9 @@ public class DrivetrainSubsystem extends SubsystemBase
   @Override
   public void simulationPeriodic() 
   {
+    // Assumes Neos. SIM for 500s not implemented.
+    //REVPhysicsSim.getInstance().run();
+ 
     // want to simulate navX gyro changing as robot turns
     // information available is radians per second and this happens every 20ms
     // radians/2pi = 360 degrees so 1 degree per second is radians / 2pi
@@ -334,9 +347,9 @@ public class DrivetrainSubsystem extends SubsystemBase
 
     double temp = m_chassisSpeeds.omegaRadiansPerSecond * 1.1459155;
 
-    temp += m_simAngle.get();
+    temp += simAngle.get();
 
-    m_simAngle.set(temp);
+    simAngle.set(temp);
 
     Unmanaged.feedEnable(20);
   }

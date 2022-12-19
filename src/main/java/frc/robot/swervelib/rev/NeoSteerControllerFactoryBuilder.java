@@ -127,7 +127,6 @@ public final class NeoSteerControllerFactoryBuilder
         private final AbsoluteEncoder absoluteEncoder;
 
         private double referenceAngleRadians = 0;
-
         private double resetIteration = 0;
 
         public ControllerImplementation(CANSparkMax motor, AbsoluteEncoder absoluteEncoder) 

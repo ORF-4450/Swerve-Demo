@@ -1,8 +1,11 @@
 package frc.robot.swervelib;
 
+import com.revrobotics.REVPhysicsSim;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
@@ -21,15 +24,15 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         this.steerControllerFactory = steerControllerFactory;
     }
 
-    public SwerveModule create(DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration) 
+    public SwerveModule create(double steerOffset, DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration) 
     {
         var driveController = driveControllerFactory.create(driveConfiguration, moduleConfiguration);
         var steerController = steerControllerFactory.create(steerConfiguration, moduleConfiguration);
 
-        return new ModuleImplementation(driveController, steerController);
+        return new ModuleImplementation(driveController, steerController, steerOffset);
     }
 
-    public SwerveModule create(ShuffleboardLayout container, DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration)
+    public SwerveModule create(double steerOffset, ShuffleboardLayout container, DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration)
     {
         var driveController = driveControllerFactory.create(
                 container,
@@ -43,7 +46,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
                 moduleConfiguration
         );
 
-        return new ModuleImplementation(driveController, steerContainer);
+        return new ModuleImplementation(driveController, steerContainer, steerOffset);
     }
 
     private static class ModuleImplementation implements SwerveModule 
@@ -52,13 +55,24 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         private final SteerController steerController;
 
         private Translation2d         translation2d;
-        private double                actualAngleDegrees;
+        private double                actualAngleDegrees, steerOffset;
         private Pose2d                pose;
 
-        private ModuleImplementation(DriveController driveController, SteerController steerController) 
+        private ModuleImplementation(DriveController driveController, SteerController steerController,
+                                     double steerOffset) 
         {
             this.driveController = driveController;
             this.steerController = steerController;
+            this.steerOffset = steerOffset;
+
+            if (RobotBase.isSimulation()) 
+            {
+                // Only Neo implemented.
+                //REVPhysicsSim.getInstance().addSparkMax(driveController.getMotorNeo(), DCMotor.getNEO(1));
+
+                //driveController.getMotorNeo().getPIDController().setP(1, 3);
+            }
+
         }
 
         @Override
@@ -109,6 +123,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
 
             driveController.setReferenceVoltage(driveVoltage);
             steerController.setReferenceAngle(steerAngle);
+
+            actualAngleDegrees = steerAngle;
         }
 
         @Override
@@ -166,7 +182,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         @Override     
         public void resetAngleToAbsolute() 
         {
-            double angle = steerController.getAbsoluteEncoder().getAbsoluteAngle() - m_turningEncoderOffset;
+            double angle = steerController.getAbsoluteEncoder().getAbsoluteAngle() - steerOffset;
+            
             steerController.getMotorEncoder().setPosition(angle);
         }
 

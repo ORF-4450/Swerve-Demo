@@ -77,6 +77,7 @@ public final class xMk3SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
+                steerOffset,
                 container,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
@@ -133,6 +134,7 @@ public final class xMk3SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
+                steerOffset,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
                         steerMotorPort,
@@ -188,6 +190,7 @@ public final class xMk3SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
+                steerOffset,
                 container,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
@@ -244,6 +247,7 @@ public final class xMk3SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
+                steerOffset,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
                         steerMotorPort,
@@ -299,6 +303,7 @@ public final class xMk3SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
+                steerOffset,
                 container,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
@@ -355,6 +360,7 @@ public final class xMk3SwerveModuleHelper
                 getFalcon500DriveFactory(configuration),
                 getNeoSteerFactory(configuration)
         ).create(
+                steerOffset,
                 driveMotorPort,
                 new NeoSteerConfiguration<>(
                         steerMotorPort,
@@ -410,6 +416,7 @@ public final class xMk3SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
+                steerOffset,
                 container,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
@@ -466,6 +473,7 @@ public final class xMk3SwerveModuleHelper
                 getNeoDriveFactory(configuration),
                 getFalcon500SteerFactory(configuration)
         ).create(
+                steerOffset,
                 driveMotorPort,
                 new Falcon500SteerConfiguration<>(
                         steerMotorPort,
