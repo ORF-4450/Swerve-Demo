@@ -37,7 +37,7 @@ import static frc.robot.Constants.*;
 
 public class DrivetrainSubsystem extends SubsystemBase 
 {
-  public boolean        autoReturnToZero = false;
+  public boolean        autoReturnToZero = false, fieldOriented = true;
 
   private SimDouble     simAngle; // navx sim
 
@@ -117,7 +117,7 @@ public class DrivetrainSubsystem extends SubsystemBase
     new Thread(() -> {
       try {
         Thread.sleep(1000);
-        //zeroGyro();
+        zeroGyro();
       } catch (Exception e) { }
     }).start();
 
@@ -210,6 +210,8 @@ public class DrivetrainSubsystem extends SubsystemBase
     m_backRightModule.setTranslation2d(new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
     
     resetModuleEncoders();
+
+    updateDS();
   }
 
   /**
@@ -252,6 +254,17 @@ public class DrivetrainSubsystem extends SubsystemBase
   public void drive(ChassisSpeeds chassisSpeeds) 
   {
     m_chassisSpeeds = chassisSpeeds;
+  }
+  
+  public void drive(double throttle, double strafe, double rotation)
+  {
+    throttle *= MAX_VELOCITY_METERS_PER_SECOND;
+    strafe *= MAX_VELOCITY_METERS_PER_SECOND;
+    rotation *= MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+
+    m_chassisSpeeds = fieldOriented
+        ? ChassisSpeeds.fromFieldRelativeSpeeds(throttle, strafe, rotation, getHeadingRotation2d())
+        : new ChassisSpeeds(throttle, strafe, rotation);
   }
 
   @Override
@@ -357,11 +370,29 @@ public class DrivetrainSubsystem extends SubsystemBase
   public void toggleAutoResetToZero()
   {
      autoReturnToZero = !autoReturnToZero;
+     updateDS();
   }
 
   public boolean getAutoResetToZero()
   {
      return autoReturnToZero;
+  }
+
+  public void toggleFieldOriented()
+  {
+      fieldOriented = !fieldOriented;
+      updateDS();
+  }
+
+  public boolean getFieldOriented()
+  {
+      return fieldOriented;
+  }
+
+  public void updateDS()
+  {
+      SmartDashboard.putBoolean("Field Oriented", fieldOriented);
+      SmartDashboard.putBoolean("Auto Return To Zero", autoReturnToZero);
   }
 
   public void resetModuleEncoders() 

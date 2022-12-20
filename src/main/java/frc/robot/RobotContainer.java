@@ -35,8 +35,8 @@ public class RobotContainer
 
     // Set up the default command for the drivetrain.
     // The controls are for field-oriented driving:
-    // Left stick Y axis -> forward and backwards movement
-    // Left stick X axis -> left and right movement
+    // Left stick Y axis -> forward and backwards movement (throttle)
+    // Left stick X axis -> left and right movement (strafe)
     // Right stick X axis -> rotation
     // Note: X and Y axis on stick is opposite X and Y axis on the WheelSpeeds object.
     // Wheelspeeds X axis is + down the field away from alliance wall. +Y axis is left
@@ -46,11 +46,19 @@ public class RobotContainer
 
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
-            () -> -modifyAxis(m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> -modifyAxis(m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-            () -> modifyAxis(m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+            () -> m_controller.getLeftY(),
+            () -> m_controller.getLeftX(),
+            () -> m_controller.getRightX(),
             m_controller
     ));
+
+    // m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
+    //         m_drivetrainSubsystem,
+    //         () -> -modifyAxis(m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+    //         () -> -modifyAxis(m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+    //         () -> modifyAxis(m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+    //         m_controller
+    // ));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -70,6 +78,11 @@ public class RobotContainer
     new Button(m_controller::getStartButton)
             // No requirements because we don't need to interrupt anything
             .whenPressed(m_drivetrainSubsystem::toggleAutoResetToZero);
+
+    // Back button toggles field oriented driving mode.
+    new Button(m_controller::getBackButton)
+            // No requirements because we don't need to interrupt anything
+            .whenPressed(m_drivetrainSubsystem::toggleFieldOriented);
   }
 
   /**
@@ -83,19 +96,19 @@ public class RobotContainer
     return new InstantCommand();
   }
 
-  private static double deadband(double value, double deadband) 
-  {
-    return Math.abs(value) > deadband ? value : 0.0;
-  }
+//   private static double deadband(double value, double deadband) 
+//   {
+//     return Math.abs(value) > deadband ? value : 0.0;
+//   }
 
-  private static double modifyAxis(double value) 
-  {
-    // Apply Deadband
-    value = deadband(value, 0.05);  // .05 original
+//   private static double modifyAxis(double value) 
+//   {
+//     // Apply Deadband
+//     value = deadband(value, 0.05);  // .05 original
 
-    // Square the axis
-    //value = Math.copySign(value * value, value);
+//     // Square the axis
+//     //value = Math.copySign(value * value, value);
 
-    return value;
-  }
+//     return value;
+//   }
 }

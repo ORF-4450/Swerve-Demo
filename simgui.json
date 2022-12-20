@@ -13,14 +13,14 @@
           "length": 0.4749999940395355,
           "width": 0.4749999940395355
         },
-        "image": "resources/2022-field.png",
-        "window": {
-          "visible": true
-        },
         "Swerve Modules": {
           "image": "resources/images/swerve_module.png",
           "length": 0.4000000059604645,
           "width": 0.4000000059604645
+        },
+        "image": "resources/2022-field.png",
+        "window": {
+          "visible": true
         }
       }
     }
