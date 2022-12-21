@@ -46,9 +46,9 @@ public class RobotContainer
 
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
-            () -> m_controller.getLeftY(),
-            () -> m_controller.getLeftX(),
+            () -> m_controller.getRightY() + m_controller.getLeftY(),
             () -> m_controller.getRightX(),
+            () -> m_controller.getLeftX(),
             m_controller
     ));
 
@@ -73,6 +73,12 @@ public class RobotContainer
     new Button(m_controller::getXButton)
             // No requirements because we don't need to interrupt anything
             .whenPressed(m_drivetrainSubsystem::zeroGyro);
+
+    new Button(m_controller::getAButton)
+            .whenPressed(m_drivetrainSubsystem::resetModulesToAbsolute);
+
+    new Button(m_controller::getBButton)
+            .whenPressed(m_drivetrainSubsystem::resetModuleEncoders);
 
     // Start button toggles autoRreturnToZero mode.
     new Button(m_controller::getStartButton)

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
@@ -51,7 +52,10 @@ public class DefaultDriveCommand extends CommandBase {
 
         double throttle = -deadband(m_throttleSupplier.getAsDouble(), .05);
         double strafe = -deadband(m_strafeSupplier.getAsDouble(), .05);
-        double rotation = deadband(m_rotationSupplier.getAsDouble(), .05);
+        double rotation = -deadband(m_rotationSupplier.getAsDouble(), .05);
+
+        // Have to invert for sim...not sure why.
+        if (RobotBase.isSimulation()) rotation *= -1;
 
         // This seemed to really slow throttle response.
         // throttle = squareTheInput(throttle);

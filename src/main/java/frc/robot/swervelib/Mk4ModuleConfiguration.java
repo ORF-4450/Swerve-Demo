@@ -15,7 +15,7 @@ public class Mk4ModuleConfiguration
     private double steerCurrentLimit    = 20.0;
 
     // Steer PID values for Neo. Customized by 4450.
-    private double steerP = .01, steerI = 0.0, steerD = .001;
+    private double steerP = .50, steerI = 0.0, steerD = .05;
 
     public double getSteerP() { return steerP; }
     public double getSteerI() { return steerI; }

@@ -39,7 +39,7 @@ public class DrivetrainSubsystem extends SubsystemBase
 {
   public boolean        autoReturnToZero = false, fieldOriented = true;
 
-  private SimDouble     simAngle; // navx sim
+  private SimDouble     simAngle; // navx sim.
 
   /**
    * The maximum voltage that will be delivered to the drive motors.
@@ -135,16 +135,16 @@ public class DrivetrainSubsystem extends SubsystemBase
     // There are 4 methods you can call to create your swerve modules.
     // The method you use depends on what motors you are using.
     //
-    // Mk3SwerveModuleHelper.createFalcon500(...)
+    // Mk4iSwerveModuleHelper.createFalcon500(...)
     //   Your module has two Falcon 500s on it. One for steering and one for driving.
     //
-    // Mk3SwerveModuleHelper.createNeo(...)
+    // Mk4iSwerveModuleHelper.createNeo(...)
     //   Your module has two NEOs on it. One for steering and one for driving.
     //
-    // Mk3SwerveModuleHelper.createFalcon500Neo(...)
+    // Mk4iSwerveModuleHelper.createFalcon500Neo(...)
     //   Your module has a Falcon 500 and a NEO on it. The Falcon 500 is for driving and the NEO is for steering.
     //
-    // Mk3SwerveModuleHelper.createNeoFalcon500(...)
+    // Mk49SwerveModuleHelper.createNeoFalcon500(...)
     //   Your module has a NEO and a Falcon 500 on it. The NEO is for driving and the Falcon 500 is for steering.
     //
     // Similar helpers also exist for Mk4 modules using the Mk4SwerveModuleHelper class.
@@ -215,6 +215,7 @@ public class DrivetrainSubsystem extends SubsystemBase
     m_backRightModule.setTranslation2d(new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
     
     resetModuleEncoders();
+    //resetModulesToAbsolute();
 
     // Set starting position on field.
     setOdometry(new Pose2d(1.03, 2.825, new Rotation2d(0)));
@@ -287,27 +288,22 @@ public class DrivetrainSubsystem extends SubsystemBase
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
-//     m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
-//     m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
-//     m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
-//     m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
-
-    if (autoReturnToZero && states[0].speedMetersPerSecond < 0.01)
+    if (!autoReturnToZero && states[0].speedMetersPerSecond < 0.01)
         m_frontLeftModule.stop();
     else
         m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
         
-    if (autoReturnToZero && states[1].speedMetersPerSecond < 0.01)
+    if (!autoReturnToZero && states[1].speedMetersPerSecond < 0.01)
         m_frontRightModule.stop();
     else
         m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
   
-    if (autoReturnToZero && states[2].speedMetersPerSecond < 0.01)
+    if (!autoReturnToZero && states[2].speedMetersPerSecond < 0.01)
         m_backLeftModule.stop();
     else
         m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
 
-    if (autoReturnToZero && states[3].speedMetersPerSecond < 0.01)
+    if (!autoReturnToZero && states[3].speedMetersPerSecond < 0.01)
         m_backRightModule.stop();
     else
         m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
@@ -420,10 +416,17 @@ public class DrivetrainSubsystem extends SubsystemBase
 
   public void resetModuleEncoders() 
   {
-      m_frontLeftModule.resetEncoders(); //resetAngleToAbsolute();
-      m_frontRightModule.resetEncoders(); //.resetAngleToAbsolute();
-      m_backLeftModule.resetEncoders(); //.resetAngleToAbsolute();
-      m_backRightModule.resetEncoders(); //.resetAngleToAbsolute();
+      m_frontLeftModule.resetEncoders(); 
+      m_frontRightModule.resetEncoders(); 
+      m_backLeftModule.resetEncoders(); 
+      m_backRightModule.resetEncoders(); 
   }
   
+  public void resetModulesToAbsolute() 
+  {
+      m_frontLeftModule.resetAngleToAbsolute();
+      m_frontRightModule.resetAngleToAbsolute();
+      m_backLeftModule.resetAngleToAbsolute();
+      m_backRightModule.resetAngleToAbsolute();
+  }
 }
