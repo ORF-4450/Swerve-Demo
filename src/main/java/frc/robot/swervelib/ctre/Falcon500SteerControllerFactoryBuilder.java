@@ -272,15 +272,26 @@ public final class Falcon500SteerControllerFactoryBuilder
         }
 
         @Override
-        public RelativeEncoder getMotorEncoder() {
+        public RelativeEncoder getMotorEncoder() 
+        {
             // TODO Auto-generated method stub
             return null;
         }
 
         @Override
-        public AbsoluteEncoder getAbsoluteEncoder() {
+        public AbsoluteEncoder getAbsoluteEncoder() 
+        {
             // TODO Auto-generated method stub
             return null;
+        }
+        
+        @Override
+        public void setBrakeMode(boolean on) 
+        {
+            if (on)
+                motor.setNeutralMode(NeutralMode.Brake);
+            else
+                motor.setNeutralMode(NeutralMode.Coast);
         }
     }
 }

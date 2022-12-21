@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import frc.robot.swervelib.DriveController;
 import frc.robot.swervelib.DriveControllerFactory;
 import frc.robot.swervelib.ModuleConfiguration;
@@ -122,6 +124,15 @@ public final class NeoDriveControllerFactoryBuilder
         public TalonFX getMotor500() 
         {
             return null;
+        }
+
+        @Override
+        public void setBrakeMode(boolean on) 
+        {
+            if (on)
+                motor.setIdleMode(IdleMode.kBrake);
+            else
+                motor.setIdleMode(IdleMode.kCoast);
         }
     }
 }

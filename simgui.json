@@ -14,7 +14,7 @@
           "width": 0.4749999940395355
         },
         "Swerve Modules": {
-          "image": "resources/images/swerve_module.png",
+          "image": "resources/swerve_module.png",
           "length": 0.4000000059604645,
           "width": 0.4000000059604645
         },

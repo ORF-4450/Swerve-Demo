@@ -1,6 +1,8 @@
 package frc.robot.swervelib.rev;
 
 import com.revrobotics.*;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import frc.robot.swervelib.*;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
@@ -217,6 +219,15 @@ public final class NeoSteerControllerFactoryBuilder
         public AbsoluteEncoder getAbsoluteEncoder()
         {
             return absoluteEncoder;
+        }
+
+        @Override
+        public void setBrakeMode(boolean on) 
+        {
+            if (on)
+                motor.setIdleMode(IdleMode.kBrake);
+            else
+                motor.setIdleMode(IdleMode.kCoast);
         }
     }
 }

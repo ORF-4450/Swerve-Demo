@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import frc.robot.Constants.ModulePosition;
 
 public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> 
 {
@@ -25,16 +26,17 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
     }
 
     public SwerveModule create(DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration, 
-                               double steerOffset) 
+                               double steerOffset, ModulePosition position) 
     {
         var driveController = driveControllerFactory.create(driveConfiguration, moduleConfiguration);
         var steerController = steerControllerFactory.create(steerConfiguration, moduleConfiguration);
 
-        return new ModuleImplementation(driveController, steerController, steerOffset);
+        return new ModuleImplementation(driveController, steerController, steerOffset, position);
     }
 
     public SwerveModule create(ShuffleboardLayout container, DriveConfiguration driveConfiguration, 
-                               SteerConfiguration steerConfiguration, double steerOffset)
+                               SteerConfiguration steerConfiguration, double steerOffset,
+                               ModulePosition position)
     {
         var driveController = driveControllerFactory.create(
                 container,
@@ -48,7 +50,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
                 moduleConfiguration
         );
 
-        return new ModuleImplementation(driveController, steerContainer, steerOffset);
+        return new ModuleImplementation(driveController, steerContainer, steerOffset, position);
     }
 
     private static class ModuleImplementation implements SwerveModule 
@@ -59,13 +61,15 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         private Translation2d         translation2d;
         private double                actualAngleDegrees, steerOffset;
         private Pose2d                pose;
+        private ModulePosition        position;
 
         private ModuleImplementation(DriveController driveController, SteerController steerController,
-                                     double steerOffset) 
+                                     double steerOffset, ModulePosition position) 
         {
             this.driveController = driveController;
             this.steerController = steerController;
             this.steerOffset = steerOffset;
+            this.position = position;
 
             if (RobotBase.isSimulation()) 
             {
@@ -86,7 +90,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         @Override
         public double getSteerAngle() 
         {
-            return steerController.getStateAngle();
+            return steerController.getStateAngle(); // Radians.
         }
 
         @Override
@@ -126,7 +130,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
             driveController.setReferenceVoltage(driveVoltage);
             steerController.setReferenceAngle(steerAngle);
 
-            actualAngleDegrees = steerAngle;
+            actualAngleDegrees = Math.toDegrees(steerAngle);
         }
 
         @Override
@@ -195,5 +199,12 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
             driveController.getEncoder().setPosition(0);
             steerController.getMotorEncoder().setPosition(0);
         }
+
+        @Override
+        public ModulePosition getModulePosition() 
+        {
+            return position;
+        }
+        
     }
 } 

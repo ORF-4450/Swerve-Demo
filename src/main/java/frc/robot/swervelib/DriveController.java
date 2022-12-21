@@ -17,4 +17,6 @@ public interface DriveController
     public CANSparkMax getMotorNeo();
 
     public TalonFX getMotor500();
+
+    public void setBrakeMode(boolean on);
 }

@@ -51,8 +51,9 @@ public class DefaultDriveCommand extends CommandBase {
 
         double throttle = -deadband(m_throttleSupplier.getAsDouble(), .05);
         double strafe = -deadband(m_strafeSupplier.getAsDouble(), .05);
-        double rotation = -deadband(m_rotationSupplier.getAsDouble(), .05);
+        double rotation = deadband(m_rotationSupplier.getAsDouble(), .05);
 
+        // This seemed to really slow throttle response.
         // throttle = squareTheInput(throttle);
         // strafe = squareTheInput(strafe);
         // rotation = squareTheInput(rotation);

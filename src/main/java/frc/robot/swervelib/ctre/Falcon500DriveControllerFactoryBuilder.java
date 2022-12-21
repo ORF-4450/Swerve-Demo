@@ -125,6 +125,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
         @Override
         public CANSparkMax getMotorNeo() 
         {
+            // TODO
             return null;
         }
 
@@ -132,6 +133,15 @@ public final class Falcon500DriveControllerFactoryBuilder {
         public TalonFX getMotor500() 
         {
             return motor;
+        }
+
+        @Override
+        public void setBrakeMode(boolean on) 
+        {
+            if (on)
+                motor.setNeutralMode(NeutralMode.Brake);
+            else
+                motor.setNeutralMode(NeutralMode.Coast);
         }
     }
 }

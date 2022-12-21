@@ -19,4 +19,6 @@ public interface SteerController
     public AbsoluteEncoder getAbsoluteEncoder();
 
     //public double getAbsoluteOffset();
+
+    public void setBrakeMode(boolean on);
 }

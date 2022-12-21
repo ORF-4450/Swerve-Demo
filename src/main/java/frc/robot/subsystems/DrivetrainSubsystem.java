@@ -150,6 +150,7 @@ public class DrivetrainSubsystem extends SubsystemBase
     // Similar helpers also exist for Mk4 modules using the Mk4SwerveModuleHelper class.
     
     m_frontLeftModule = Mk4iSwerveModuleHelper.createNeo(
+            ModulePosition.FL,
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
             tab.getLayout("Front Left Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
@@ -166,11 +167,13 @@ public class DrivetrainSubsystem extends SubsystemBase
             FRONT_LEFT_MODULE_STEER_OFFSET
     );
 
+    // Sets the module center translation from center of robot.
     m_frontLeftModule.setTranslation2d(new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0));
     
     // We will do the same for the other modules
 
     m_frontRightModule = Mk4iSwerveModuleHelper.createNeo(
+            ModulePosition.FR,
             tab.getLayout("Front Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(2, 0),
@@ -184,6 +187,7 @@ public class DrivetrainSubsystem extends SubsystemBase
     m_frontRightModule.setTranslation2d(new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
     
     m_backLeftModule = Mk4iSwerveModuleHelper.createNeo(
+            ModulePosition.BL,
             tab.getLayout("Back Left Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(4, 0),
@@ -197,6 +201,7 @@ public class DrivetrainSubsystem extends SubsystemBase
     m_backLeftModule.setTranslation2d(new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
     m_backRightModule = Mk4iSwerveModuleHelper.createNeo(
+            ModulePosition.BR,
             tab.getLayout("Back Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(6, 0),
@@ -211,6 +216,9 @@ public class DrivetrainSubsystem extends SubsystemBase
     
     resetModuleEncoders();
 
+    // Set starting position on field.
+    setOdometry(new Pose2d(1.03, 2.825, new Rotation2d(0)));
+    
     updateDS();
   }
 
@@ -307,26 +315,41 @@ public class DrivetrainSubsystem extends SubsystemBase
     updateOdometry(states);
 
     field2d.setRobotPose(getPoseMeters());
+
+    setField2dModulePoses();
   }
 
   public void updateOdometry(SwerveModuleState[] states)
   {
     m_odometry.update(getHeadingRotation2d(), states);
 
-    setModulePose(m_frontLeftModule);
-    setModulePose(m_frontRightModule);
-    setModulePose(m_backLeftModule);
-    setModulePose(m_backRightModule);
+    updateModulePose(m_frontLeftModule);
+    updateModulePose(m_frontRightModule);
+    updateModulePose(m_backLeftModule);
+    updateModulePose(m_backRightModule);
   }
 
-  private void setModulePose(SwerveModule module)
+  private void updateModulePose(SwerveModule module)
   {
     Translation2d modulePosition = module.getTranslation2d()
-        .rotateBy(getHeadingRotation2d())
+        //.rotateBy(getHeadingRotation2d())
+        .rotateBy(getPoseMeters().getRotation())
         .plus(getPoseMeters().getTranslation());
     
     module.setModulePose(
         new Pose2d(modulePosition, module.getHeadingRotation2d().plus(getHeadingRotation2d())));
+  }
+
+  private void setField2dModulePoses()
+  {
+    Pose2d      modulePoses[] = new Pose2d[4];
+    
+    modulePoses[0] = m_frontLeftModule.getPose();
+    modulePoses[1] = m_frontRightModule.getPose();
+    modulePoses[2] = m_backLeftModule.getPose();
+    modulePoses[3] = m_backRightModule.getPose();
+
+    field2d.getObject("Swerve Modules").setPoses(modulePoses);
   }
 
   public Pose2d getPoseMeters() 
@@ -397,9 +420,10 @@ public class DrivetrainSubsystem extends SubsystemBase
 
   public void resetModuleEncoders() 
   {
-      m_frontLeftModule.resetAngleToAbsolute();
-      m_frontRightModule.resetAngleToAbsolute();
-      m_backLeftModule.resetAngleToAbsolute();
-      m_backRightModule.resetAngleToAbsolute();
+      m_frontLeftModule.resetEncoders(); //resetAngleToAbsolute();
+      m_frontRightModule.resetEncoders(); //.resetAngleToAbsolute();
+      m_backLeftModule.resetEncoders(); //.resetAngleToAbsolute();
+      m_backRightModule.resetEncoders(); //.resetAngleToAbsolute();
   }
+  
 }

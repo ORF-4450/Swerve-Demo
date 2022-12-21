@@ -1,5 +1,6 @@
 package frc.robot.swervelib;
 
+import frc.robot.Constants.ModulePosition;
 import frc.robot.swervelib.ctre.*;
 import frc.robot.swervelib.rev.NeoDriveControllerFactoryBuilder;
 import frc.robot.swervelib.rev.NeoSteerConfiguration;
@@ -62,6 +63,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500(
+            ModulePosition position,
             ShuffleboardLayout container,
             Mk4ModuleConfiguration configuration,
             GearRatio gearRatio,
@@ -81,7 +83,8 @@ public final class Mk4SwerveModuleHelper
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
                 ),
-                steerOffset
+                steerOffset,
+                position
         );
     }
 
@@ -98,6 +101,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500(
+            ModulePosition position,
             ShuffleboardLayout container,
             GearRatio gearRatio,
             int driveMotorPort,
@@ -105,7 +109,15 @@ public final class Mk4SwerveModuleHelper
             int steerEncoderPort,
             double steerOffset) 
     {
-        return createFalcon500(container, new Mk4ModuleConfiguration(), gearRatio, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset);
+        return createFalcon500(
+            position, 
+            container, 
+            new Mk4ModuleConfiguration(), 
+            gearRatio, 
+            driveMotorPort, 
+            steerMotorPort, 
+            steerEncoderPort, 
+            steerOffset);
     }
 
     /**
@@ -120,6 +132,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500(
+            ModulePosition position,
             Mk4ModuleConfiguration configuration,
             GearRatio gearRatio,
             int driveMotorPort,
@@ -137,7 +150,8 @@ public final class Mk4SwerveModuleHelper
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
                 ),
-                steerOffset
+                steerOffset,
+                position
         );
     }
 
@@ -152,13 +166,21 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500(
+            ModulePosition position,
             GearRatio gearRatio,
             int driveMotorPort,
             int steerMotorPort,
             int steerEncoderPort,
             double steerOffset) 
     {
-        return createFalcon500(new Mk4ModuleConfiguration(), gearRatio, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset);
+        return createFalcon500(
+            position,
+            new Mk4ModuleConfiguration(), 
+            gearRatio, 
+            driveMotorPort, 
+            steerMotorPort, 
+            steerEncoderPort, 
+            steerOffset);
     }
 
     /**
@@ -175,6 +197,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createNeo(
+            ModulePosition position,
             ShuffleboardLayout container,
             Mk4ModuleConfiguration configuration,
             GearRatio gearRatio,
@@ -194,7 +217,8 @@ public final class Mk4SwerveModuleHelper
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
                 ),
-                steerOffset
+                steerOffset,
+                position
         );
     }
 
@@ -211,6 +235,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createNeo(
+            ModulePosition position, 
             ShuffleboardLayout container,
             GearRatio gearRatio,
             int driveMotorPort,
@@ -218,7 +243,7 @@ public final class Mk4SwerveModuleHelper
             int steerEncoderPort,
             double steerOffset) 
     {
-        return createNeo(container, new Mk4ModuleConfiguration(), gearRatio, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset);
+        return createNeo(position, container, new Mk4ModuleConfiguration(), gearRatio, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset);
     }
 
     /**
@@ -233,6 +258,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createNeo(
+            ModulePosition position,
             Mk4ModuleConfiguration configuration,
             GearRatio gearRatio,
             int driveMotorPort,
@@ -250,7 +276,8 @@ public final class Mk4SwerveModuleHelper
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
                 ),
-                steerOffset
+                steerOffset,
+                position
         );
     }
 
@@ -265,13 +292,21 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createNeo(
+            ModulePosition position,
             GearRatio gearRatio,
             int driveMotorPort,
             int steerMotorPort,
             int steerEncoderPort,
             double steerOffset) 
     {
-        return createNeo(new Mk4ModuleConfiguration(), gearRatio, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset);
+        return createNeo(
+            position,
+            new Mk4ModuleConfiguration(), 
+            gearRatio, 
+            driveMotorPort, 
+            steerMotorPort, 
+            steerEncoderPort, 
+            steerOffset);
     }
 
     /**
@@ -288,6 +323,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500Neo(
+            ModulePosition position,
             ShuffleboardLayout container,
             Mk4ModuleConfiguration configuration,
             GearRatio gearRatio,
@@ -307,7 +343,8 @@ public final class Mk4SwerveModuleHelper
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
                 ),
-                steerOffset
+                steerOffset,
+                position
         );
     }
 
@@ -324,6 +361,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500Neo(
+            ModulePosition position,
             ShuffleboardLayout container,
             GearRatio gearRatio,
             int driveMotorPort,
@@ -331,7 +369,15 @@ public final class Mk4SwerveModuleHelper
             int steerEncoderPort,
             double steerOffset) 
     {
-        return createFalcon500Neo(container, new Mk4ModuleConfiguration(), gearRatio, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset);
+        return createFalcon500Neo(
+            position,
+            container, 
+            new Mk4ModuleConfiguration(), 
+            gearRatio, 
+            driveMotorPort, 
+            steerMotorPort, 
+            steerEncoderPort, 
+            steerOffset);
     }
 
     /**
@@ -346,6 +392,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500Neo(
+            ModulePosition position,
             Mk4ModuleConfiguration configuration,
             GearRatio gearRatio,
             int driveMotorPort,
@@ -363,7 +410,8 @@ public final class Mk4SwerveModuleHelper
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
                 ),
-                steerOffset
+                steerOffset,
+                position
         );
     }
 
@@ -378,13 +426,21 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500Neo(
+            ModulePosition position,
             GearRatio gearRatio,
             int driveMotorPort,
             int steerMotorPort,
             int steerEncoderPort,
             double steerOffset) 
     {
-        return createFalcon500Neo(new Mk4ModuleConfiguration(), gearRatio, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset);
+        return createFalcon500Neo(
+            position, 
+            new Mk4ModuleConfiguration(), 
+            gearRatio, 
+            driveMotorPort, 
+            steerMotorPort, 
+            steerEncoderPort, 
+            steerOffset);
     }
 
     /**
@@ -401,6 +457,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createNeoFalcon500(
+            ModulePosition position,
             ShuffleboardLayout container,
             Mk4ModuleConfiguration configuration,
             GearRatio gearRatio,
@@ -420,7 +477,8 @@ public final class Mk4SwerveModuleHelper
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
                 ),
-                steerOffset
+                steerOffset,
+                position
         );
     }
 
@@ -437,6 +495,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createNeoFalcon500(
+            ModulePosition position,
             ShuffleboardLayout container,
             GearRatio gearRatio,
             int driveMotorPort,
@@ -444,7 +503,14 @@ public final class Mk4SwerveModuleHelper
             int steerEncoderPort,
             double steerOffset) 
     {
-        return createNeoFalcon500(container, new Mk4ModuleConfiguration(), gearRatio, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset);
+        return createNeoFalcon500(
+            position,
+            new Mk4ModuleConfiguration(), 
+            gearRatio, 
+            driveMotorPort, 
+            steerMotorPort, 
+            steerEncoderPort, 
+            steerOffset);
     }
 
     /**
@@ -459,6 +525,7 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createNeoFalcon500(
+            ModulePosition position,
             Mk4ModuleConfiguration configuration,
             GearRatio gearRatio,
             int driveMotorPort,
@@ -476,7 +543,8 @@ public final class Mk4SwerveModuleHelper
                         steerMotorPort,
                         new CanCoderAbsoluteConfiguration(steerEncoderPort, steerOffset)
                 ),
-                steerOffset
+                steerOffset,
+                position
         );
     }
 
@@ -491,13 +559,21 @@ public final class Mk4SwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createNeoFalcon500(
+            ModulePosition position,
             GearRatio gearRatio,
             int driveMotorPort,
             int steerMotorPort,
             int steerEncoderPort,
             double steerOffset) 
     {
-        return createNeoFalcon500(new Mk4ModuleConfiguration(), gearRatio, driveMotorPort, steerMotorPort, steerEncoderPort, steerOffset);
+        return createNeoFalcon500(
+            position,
+            new Mk4ModuleConfiguration(), 
+            gearRatio, 
+            driveMotorPort, 
+            steerMotorPort, 
+            steerEncoderPort, 
+            steerOffset);
     }
 
     public enum GearRatio {
