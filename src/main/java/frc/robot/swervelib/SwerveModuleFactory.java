@@ -2,6 +2,7 @@ package frc.robot.swervelib;
 
 import com.revrobotics.REVPhysicsSim;
 
+import Team4450.Lib.Util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -186,15 +187,18 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         }
 
         @Override     
-        public void resetAngleToAbsolute() 
+        public void resetSteerAngleToAbsolute() 
         {
             double angle = steerController.getAbsoluteEncoder().getAbsoluteAngle() - steerOffset;
             
+            Util.consoleLog("eaa=%.3f  off=%.3f  result=%.3f",
+                steerController.getAbsoluteEncoder().getAbsoluteAngle(), steerOffset, angle);
+
             steerController.getMotorEncoder().setPosition(angle);
         }
 
         @Override
-        public void resetEncoders() 
+        public void resetMotorEncoders() 
         {
             driveController.getEncoder().setPosition(0);
             steerController.getMotorEncoder().setPosition(0);

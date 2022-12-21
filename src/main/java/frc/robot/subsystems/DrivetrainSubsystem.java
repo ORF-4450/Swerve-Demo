@@ -416,17 +416,22 @@ public class DrivetrainSubsystem extends SubsystemBase
 
   public void resetModuleEncoders() 
   {
-      m_frontLeftModule.resetEncoders(); 
-      m_frontRightModule.resetEncoders(); 
-      m_backLeftModule.resetEncoders(); 
-      m_backRightModule.resetEncoders(); 
+      m_frontLeftModule.resetMotorEncoders(); 
+      m_frontRightModule.resetMotorEncoders(); 
+      m_backLeftModule.resetMotorEncoders(); 
+      m_backRightModule.resetMotorEncoders(); 
   }
   
   public void resetModulesToAbsolute() 
   {
-      m_frontLeftModule.resetAngleToAbsolute();
-      m_frontRightModule.resetAngleToAbsolute();
-      m_backLeftModule.resetAngleToAbsolute();
-      m_backRightModule.resetAngleToAbsolute();
+      m_frontLeftModule.resetSteerAngleToAbsolute();
+      m_frontRightModule.resetSteerAngleToAbsolute();
+      m_backLeftModule.resetSteerAngleToAbsolute();
+      m_backRightModule.resetSteerAngleToAbsolute();
+  }
+
+  public void resetModulesToForward()
+  {
+    drive(0, 0, 0);
   }
 }

@@ -74,6 +74,9 @@ public class RobotContainer
             // No requirements because we don't need to interrupt anything
             .whenPressed(m_drivetrainSubsystem::zeroGyro);
 
+    new Button(m_controller::getYButton)
+            .whenPressed(m_drivetrainSubsystem::resetModulesToForward);
+
     new Button(m_controller::getAButton)
             .whenPressed(m_drivetrainSubsystem::resetModulesToAbsolute);
 

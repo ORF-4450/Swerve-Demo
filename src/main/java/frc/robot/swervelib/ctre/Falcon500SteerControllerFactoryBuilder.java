@@ -266,6 +266,8 @@ public final class Falcon500SteerControllerFactoryBuilder
         @Override
         public void setPidConstants(double proportional, double integral, double derivative)
         {
+            // Neo code here to remind what needs to be done here. controller is the motors
+            // on board pid loop assuming that is how 500s are set up.
             // checkNeoError(controller.setP(proportional), "Failed to set NEO PID proportional constant");
             // checkNeoError(controller.setI(integral), "Failed to set NEO PID integral constant");
             // checkNeoError(controller.setD(derivative), "Failed to set NEO PID derivative constant");

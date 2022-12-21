@@ -29,9 +29,9 @@ public interface SwerveModule
 
     Pose2d getPose();
 
-    void resetAngleToAbsolute();
+    void resetSteerAngleToAbsolute();
 
-    void resetEncoders();
+    void resetMotorEncoders();
 
     ModulePosition getModulePosition();
 }
