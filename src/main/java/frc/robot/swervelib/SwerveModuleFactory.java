@@ -191,8 +191,9 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         {
             double angle = steerController.getAbsoluteEncoder().getAbsoluteAngle() - steerOffset;
             
-            Util.consoleLog("eaa=%.3f  off=%.3f  result=%.3f",
-                steerController.getAbsoluteEncoder().getAbsoluteAngle(), steerOffset, angle);
+            Util.consoleLog("eaa=%.3f  off=%.3f  result=%.3f rad=%.3f",
+                Math.toDegrees(steerController.getAbsoluteEncoder().getAbsoluteAngle()), 
+                Math.toDegrees(steerOffset), Math.toDegrees(angle), angle);
 
             steerController.getMotorEncoder().setPosition(angle);
         }
@@ -209,6 +210,5 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         {
             return position;
         }
-        
     }
 } 

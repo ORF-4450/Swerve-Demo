@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,6 +19,10 @@ public class DefaultDriveCommand extends CommandBase {
     private final DoubleSupplier m_strafeSupplier;
     private final DoubleSupplier m_rotationSupplier;
     private final XboxController m_controller;
+    
+    private final SlewRateLimiter m_slewX = new SlewRateLimiter(1.5);
+    private final SlewRateLimiter m_slewY = new SlewRateLimiter(1.5);
+    private final SlewRateLimiter m_slewRot = new SlewRateLimiter(3.0);
 
     public DefaultDriveCommand(DrivetrainSubsystem drivetrainSubsystem,
                                DoubleSupplier throttleSupplier,
@@ -57,22 +62,19 @@ public class DefaultDriveCommand extends CommandBase {
         // Have to invert for sim...not sure why.
         if (RobotBase.isSimulation()) rotation *= -1;
 
-        // This seemed to really slow throttle response.
+        // Both squaring inputs and slew rate limiters are ways to slow down
+        // or smooth response to the joystick inputs. Will test both methods.
+
+        // Squaring seemed to really slow throttle response.
         // throttle = squareTheInput(throttle);
         // strafe = squareTheInput(strafe);
         // rotation = squareTheInput(rotation);
 
-        m_drivetrainSubsystem.drive(throttle, strafe, rotation);
+        throttle = m_slewX.calculate(throttle);
+        strafe = m_slewY.calculate(strafe);
+        rotation = m_slewRot.calculate(rotation);
 
-        // You can use `new ChassisSpeeds(...)` for robot-oriented movement instead of field-oriented movement
-        // m_drivetrainSubsystem.drive(
-        //         ChassisSpeeds.fromFieldRelativeSpeeds(
-        //                 throttle,
-        //                 strafe,
-        //                 rotation,
-        //                 m_drivetrainSubsystem.getGyroRotation2d()
-        //         )
-        //);
+        m_drivetrainSubsystem.drive(throttle, strafe, rotation);
     }
 
     @Override

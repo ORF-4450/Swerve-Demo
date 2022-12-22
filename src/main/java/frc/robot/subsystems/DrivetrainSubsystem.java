@@ -14,6 +14,7 @@ import frc.robot.swervelib.SdsModuleConfigurations;
 import frc.robot.swervelib.SwerveModule;
 
 import Team4450.Lib.LCD;
+import Team4450.Lib.Util;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
@@ -37,7 +38,7 @@ import static frc.robot.Constants.*;
 
 public class DrivetrainSubsystem extends SubsystemBase 
 {
-  public boolean        autoReturnToZero = false, fieldOriented = true;
+  private boolean       autoReturnToZero = false, fieldOriented = true, overrideAutoResetToZero;
 
   private SimDouble     simAngle; // navx sim.
 
@@ -260,22 +261,59 @@ public class DrivetrainSubsystem extends SubsystemBase
     return Rotation2d.fromDegrees(getHeadingDegrees());
   }
 
+  /**
+   * Set the chassis speeds object that the periodic function executes.
+   * @param chassisSpeeds ChassisSpeeds object to execute.
+   */
   public void drive(ChassisSpeeds chassisSpeeds) 
   {
     m_chassisSpeeds = chassisSpeeds;
   }
-  
+
+  /**
+   * Generate a chassis speeds object that the periodic funtion executes from the
+   * directional inputs. Speeds in m/s. Optionally turns on the auto return to zero
+   * position function for one periodic call. Used to align wheels to zero even when 
+   * auto return to zero is off.
+   * @param throttle Throttle speed.
+   * @param strafe Strafe speed.
+   * @param rotation Rotation speed.
+   * @param override True to override auto return to zero function.
+   */
+  public void drive(double throttle, double strafe, double rotation, boolean override)
+  {
+      overrideAutoResetToZero = override;
+
+      if (overrideAutoResetToZero) autoReturnToZero = true;
+
+      drive(throttle, strafe, rotation);
+  }
+
+  /**
+   * Generate a chassis speeds object that the periodic funtion executes from the
+   * directional inputs. Speeds in m/s.
+   * @param throttle Throttle speed.
+   * @param strafe Strafe speed.
+   * @param rotation Rotation speed.
+   */
   public void drive(double throttle, double strafe, double rotation)
   {
+    // Convert joystick values into speeds.
+
     throttle *= MAX_VELOCITY_METERS_PER_SECOND;
     strafe *= MAX_VELOCITY_METERS_PER_SECOND;
     rotation *= MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+
+    // Create chassis speeds in either field or robot drive orientation.
 
     m_chassisSpeeds = fieldOriented
         ? ChassisSpeeds.fromFieldRelativeSpeeds(throttle, strafe, rotation, getHeadingRotation2d())
         : new ChassisSpeeds(throttle, strafe, rotation);
   }
 
+  /**
+   * Drives the robot with the currently set chassis speeds object on each scheduler pass.
+   */
   @Override
   public void periodic() 
   {
@@ -308,6 +346,10 @@ public class DrivetrainSubsystem extends SubsystemBase
     else
         m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
 
+    if (overrideAutoResetToZero) autoReturnToZero = false;
+
+    overrideAutoResetToZero = false;
+
     updateOdometry(states);
 
     field2d.setRobotPose(getPoseMeters());
@@ -315,6 +357,11 @@ public class DrivetrainSubsystem extends SubsystemBase
     setField2dModulePoses();
   }
 
+  /**
+   * Update robot pose (position & rotation) on the field. Used to drive
+   * the field2d object.
+   * @param states Array of module state objects.
+   */
   public void updateOdometry(SwerveModuleState[] states)
   {
     m_odometry.update(getHeadingRotation2d(), states);
@@ -325,6 +372,13 @@ public class DrivetrainSubsystem extends SubsystemBase
     updateModulePose(m_backRightModule);
   }
 
+  /**
+   * Update the pose of a swerve module on the field2d object. Module
+   * pose is connected to the robot pose so they move together on the
+   * field sim but this code will rotate the module icon to direction wheel
+   * is pointing.
+   * @param module Swerve module to update.
+   */
   private void updateModulePose(SwerveModule module)
   {
     Translation2d modulePosition = module.getTranslation2d()
@@ -432,6 +486,8 @@ public class DrivetrainSubsystem extends SubsystemBase
 
   public void resetModulesToForward()
   {
-    drive(0, 0, 0);
+      Util.consoleLog("reset to forward");
+      
+      drive(0, 0, 0, true);
   }
 }

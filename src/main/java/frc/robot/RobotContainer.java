@@ -22,7 +22,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class RobotContainer 
 {
   // The robot's subsystems and commands are defined here.
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
   private final XboxController m_controller = new XboxController(0);
 
@@ -104,20 +104,4 @@ public class RobotContainer
     // An ExampleCommand will run in autonomous
     return new InstantCommand();
   }
-
-//   private static double deadband(double value, double deadband) 
-//   {
-//     return Math.abs(value) > deadband ? value : 0.0;
-//   }
-
-//   private static double modifyAxis(double value) 
-//   {
-//     // Apply Deadband
-//     value = deadband(value, 0.05);  // .05 original
-
-//     // Square the axis
-//     //value = Math.copySign(value * value, value);
-
-//     return value;
-//   }
 }
