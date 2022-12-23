@@ -5,6 +5,7 @@ import frc.robot.swervelib.ctre.*;
 import frc.robot.swervelib.rev.NeoDriveControllerFactoryBuilder;
 import frc.robot.swervelib.rev.NeoSteerConfiguration;
 import frc.robot.swervelib.rev.NeoSteerControllerFactoryBuilder;
+import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
 public final class Mk4iSwerveModuleHelper 
@@ -15,7 +16,7 @@ public final class Mk4iSwerveModuleHelper
     private static DriveControllerFactory<?, Integer> getFalcon500DriveFactory(Mk4ModuleConfiguration configuration) 
     {
         return new Falcon500DriveControllerFactoryBuilder()
-                .withVoltageCompensation(configuration.getNominalVoltage())
+                .withVoltageCompensation(configuration.getNominalDriveVoltage())
                 .withCurrentLimit(configuration.getDriveCurrentLimit())
                 .build();
     }
@@ -23,7 +24,7 @@ public final class Mk4iSwerveModuleHelper
     private static SteerControllerFactory<?, Falcon500SteerConfiguration<CanCoderAbsoluteConfiguration>> getFalcon500SteerFactory(Mk4ModuleConfiguration configuration) 
     {
         return new Falcon500SteerControllerFactoryBuilder()
-                .withVoltageCompensation(configuration.getNominalVoltage())
+                .withVoltageCompensation(configuration.getNominalSteerVoltage())
                 .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD())
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .build(new CanCoderFactoryBuilder()
@@ -33,16 +34,20 @@ public final class Mk4iSwerveModuleHelper
 
     private static DriveControllerFactory<?, Integer> getNeoDriveFactory(Mk4ModuleConfiguration configuration) 
     {
+        Util.consoleLog();
+    
         return new NeoDriveControllerFactoryBuilder()
-                .withVoltageCompensation(configuration.getNominalVoltage())
+                .withVoltageCompensation(configuration.getNominalDriveVoltage())
                 .withCurrentLimit(configuration.getDriveCurrentLimit())
                 .build();
     }
 
     private static SteerControllerFactory<?, NeoSteerConfiguration<CanCoderAbsoluteConfiguration>> getNeoSteerFactory(Mk4ModuleConfiguration configuration) 
     {
+        Util.consoleLog();
+    
         return new NeoSteerControllerFactoryBuilder()
-                .withVoltageCompensation(configuration.getNominalVoltage())
+                .withVoltageCompensation(configuration.getNominalSteerVoltage())
                 .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD())
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .build(new CanCoderFactoryBuilder()
@@ -207,6 +212,8 @@ public final class Mk4iSwerveModuleHelper
             int steerEncoderPort,
             double steerOffset)
     {
+        Util.consoleLog();
+    
         return new SwerveModuleFactory<>(
                 gearRatio.getConfiguration(),
                 getNeoDriveFactory(configuration),
@@ -244,6 +251,8 @@ public final class Mk4iSwerveModuleHelper
             int steerEncoderPort,
             double steerOffset) 
     {
+        Util.consoleLog();
+    
         return createNeo(
             position, 
             container, 
@@ -275,6 +284,8 @@ public final class Mk4iSwerveModuleHelper
             int steerEncoderPort,
             double steerOffset) 
     {
+        Util.consoleLog();
+    
         return new SwerveModuleFactory<>(
                 gearRatio.getConfiguration(),
                 getNeoDriveFactory(configuration),
@@ -308,6 +319,8 @@ public final class Mk4iSwerveModuleHelper
             int steerEncoderPort,
             double steerOffset) 
     {
+        Util.consoleLog();
+    
         return createNeo(
             position, 
             new Mk4ModuleConfiguration(), 

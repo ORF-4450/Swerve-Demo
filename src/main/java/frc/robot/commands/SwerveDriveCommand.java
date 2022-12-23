@@ -5,31 +5,36 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.DrivetrainSubsystem;
+
+import static frc.robot.Constants.*;
+import frc.robot.subsystems.SwerveDriveBase;
 
 import java.util.function.DoubleSupplier;
 
 import Team4450.Lib.LCD;
+import Team4450.Lib.Util;
 
-public class DefaultDriveCommand extends CommandBase {
-    private final DrivetrainSubsystem m_drivetrainSubsystem;
+public class SwerveDriveCommand extends CommandBase 
+{
+    private final SwerveDriveBase m_drivetrainSubsystem;
 
     private final DoubleSupplier m_throttleSupplier;
     private final DoubleSupplier m_strafeSupplier;
     private final DoubleSupplier m_rotationSupplier;
     private final XboxController m_controller;
     
-    private final SlewRateLimiter m_slewX = new SlewRateLimiter(1.5);
-    private final SlewRateLimiter m_slewY = new SlewRateLimiter(1.5);
-    private final SlewRateLimiter m_slewRot = new SlewRateLimiter(3.0);
+    private final SlewRateLimiter m_slewX = new SlewRateLimiter(THROTTLE_SLEW);
+    private final SlewRateLimiter m_slewY = new SlewRateLimiter(THROTTLE_SLEW);
+    private final SlewRateLimiter m_slewRot = new SlewRateLimiter(ROTATION_SLEW);
 
-    public DefaultDriveCommand(DrivetrainSubsystem drivetrainSubsystem,
+    public SwerveDriveCommand(SwerveDriveBase drivetrainSubsystem,
                                DoubleSupplier throttleSupplier,
                                DoubleSupplier strafeSupplier,
                                DoubleSupplier rotationSupplier,
                                XboxController controller) 
     {
+        Util.consoleLog();
+        
         this.m_drivetrainSubsystem = drivetrainSubsystem;
         this.m_throttleSupplier = throttleSupplier;
         this.m_strafeSupplier = strafeSupplier;
@@ -55,9 +60,9 @@ public class DefaultDriveCommand extends CommandBase {
             m_drivetrainSubsystem.getGyroYaw()
         );
 
-        double throttle = -deadband(m_throttleSupplier.getAsDouble(), .05);
-        double strafe = -deadband(m_strafeSupplier.getAsDouble(), .05);
-        double rotation = -deadband(m_rotationSupplier.getAsDouble(), .05);
+        double throttle = -deadband(m_throttleSupplier.getAsDouble(), THROTTLE_DEADBAND);
+        double strafe = -deadband(m_strafeSupplier.getAsDouble(), THROTTLE_DEADBAND);
+        double rotation = -deadband(m_rotationSupplier.getAsDouble(), ROTATION_DEADBAND);
 
         // Have to invert for sim...not sure why.
         if (RobotBase.isSimulation()) rotation *= -1;
@@ -80,6 +85,8 @@ public class DefaultDriveCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) 
     {
+        Util.consoleLog("interrupted=%b", interrupted);
+
         m_drivetrainSubsystem.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
     }
  

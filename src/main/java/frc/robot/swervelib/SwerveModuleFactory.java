@@ -21,6 +21,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
                                DriveControllerFactory<?, DriveConfiguration> driveControllerFactory,
                                SteerControllerFactory<?, SteerConfiguration> steerControllerFactory) 
     {
+        Util.consoleLog();
+    
         this.moduleConfiguration = moduleConfiguration;
         this.driveControllerFactory = driveControllerFactory;
         this.steerControllerFactory = steerControllerFactory;
@@ -29,6 +31,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
     public SwerveModule create(DriveConfiguration driveConfiguration, SteerConfiguration steerConfiguration, 
                                double steerOffset, ModulePosition position) 
     {
+        Util.consoleLog();
+    
         var driveController = driveControllerFactory.create(driveConfiguration, moduleConfiguration);
         var steerController = steerControllerFactory.create(steerConfiguration, moduleConfiguration);
 
@@ -39,6 +43,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
                                SteerConfiguration steerConfiguration, double steerOffset,
                                ModulePosition position)
     {
+        Util.consoleLog();
+    
         var driveController = driveControllerFactory.create(
                 container,
                 driveConfiguration,
@@ -67,6 +73,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         private ModuleImplementation(DriveController driveController, SteerController steerController,
                                      double steerOffset, ModulePosition position) 
         {
+            Util.consoleLog();
+    
             this.driveController = driveController;
             this.steerController = steerController;
             this.steerOffset = steerOffset;
@@ -79,7 +87,6 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
 
                 //driveController.getMotorNeo().getPIDController().setP(1, 3);
             }
-
         }
 
         @Override
@@ -201,6 +208,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         @Override
         public void resetMotorEncoders() 
         {
+            Util.consoleLog();
+    
             driveController.getEncoder().setPosition(0);
             steerController.getMotorEncoder().setPosition(0);
         }

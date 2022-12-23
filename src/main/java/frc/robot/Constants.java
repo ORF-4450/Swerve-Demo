@@ -16,7 +16,23 @@ import Team4450.Lib.Util;
  */
 public final class Constants 
 {
-    public static String		PROGRAM_NAME = "SDT-12.22.22-1";
+    public static final String	PROGRAM_NAME = "SDT-12.22.22-1";
+
+    public static final double  THROTTLE_DEADBAND = .05;
+    public static final double  ROTATION_DEADBAND = .05;
+    public static final double  THROTTLE_SLEW = 1.5;
+    public static final double  ROTATION_SLEW = 3.0;
+
+    // Steering PID values. Set for Neos on 4450 test base;
+    public static final double  STEER_PID_P = .50;
+    public static final double  STEER_PID_I = 0.0;
+    public static final double  STEER_PID_D = .05;
+
+    public static final double  DRIVE_MAX_CURRENT = 20.0;
+    public static final double  STEER_MAX_CURRENT = 20.0;
+
+    public static final double  STEER_MAX_VOLTAGE = 12.0;
+    public static final double  DRIVE_MAX_VOLTAGE = 12.0;
 
     /**
      * The left-to-right distance between the drivetrain wheels

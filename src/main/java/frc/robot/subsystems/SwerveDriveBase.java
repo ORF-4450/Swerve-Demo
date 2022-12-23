@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.unmanaged.Unmanaged;
-//import com.ctre.phoenix.sensors.PigeonIMU;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.REVPhysicsSim;
 
@@ -15,6 +14,7 @@ import frc.robot.swervelib.SwerveModule;
 
 import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
+
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.VecBuilder;
@@ -36,7 +36,7 @@ import edu.wpi.first.wpilibj.SPI;
 
 import static frc.robot.Constants.*;
 
-public class DrivetrainSubsystem extends SubsystemBase 
+public class SwerveDriveBase extends SubsystemBase 
 {
   private boolean       autoReturnToZero = false, fieldOriented = true, overrideAutoResetToZero;
 
@@ -109,8 +109,10 @@ public class DrivetrainSubsystem extends SubsystemBase
 
   private final Field2d     field2d = new Field2d();
 
-  public DrivetrainSubsystem() 
+  public SwerveDriveBase() 
   {
+    Util.consoleLog();
+
     // This thread will wait a bit and then reset the gyro while this constructor
     // continues to run. We do this because we have to wait a bit to reset the
     // gyro after creating it.
@@ -230,6 +232,8 @@ public class DrivetrainSubsystem extends SubsystemBase
    */
   public void zeroGyro() 
   {
+    Util.consoleLog();
+
     m_navx.zeroYaw();
   }
 
@@ -442,6 +446,8 @@ public class DrivetrainSubsystem extends SubsystemBase
 
   public void toggleAutoResetToZero()
   {
+    Util.consoleLog();
+    
      autoReturnToZero = !autoReturnToZero;
      updateDS();
   }
@@ -453,6 +459,8 @@ public class DrivetrainSubsystem extends SubsystemBase
 
   public void toggleFieldOriented()
   {
+      Util.consoleLog();
+    
       fieldOriented = !fieldOriented;
       updateDS();
   }
@@ -470,6 +478,8 @@ public class DrivetrainSubsystem extends SubsystemBase
 
   public void resetModuleEncoders() 
   {
+      Util.consoleLog();
+    
       m_frontLeftModule.resetMotorEncoders(); 
       m_frontRightModule.resetMotorEncoders(); 
       m_backLeftModule.resetMotorEncoders(); 

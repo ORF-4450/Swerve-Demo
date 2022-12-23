@@ -6,6 +6,8 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+
+import Team4450.Lib.Util;
 import frc.robot.swervelib.AbsoluteEncoder;
 import frc.robot.swervelib.AbsoluteEncoderFactory;
 
@@ -28,6 +30,8 @@ public class CanCoderFactoryBuilder
 
     public AbsoluteEncoderFactory<CanCoderAbsoluteConfiguration> build() 
     {
+        Util.consoleLog();
+    
         return configuration -> {
             CANCoderConfiguration config = new CANCoderConfiguration();
             config.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
@@ -51,6 +55,8 @@ public class CanCoderFactoryBuilder
 
         private EncoderImplementation(CANCoder encoder) 
         {
+            Util.consoleLog();
+    
             this.encoder = encoder;
         }
 

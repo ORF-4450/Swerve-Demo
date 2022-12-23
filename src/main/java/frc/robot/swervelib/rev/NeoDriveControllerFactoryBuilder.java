@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import Team4450.Lib.Util;
 import frc.robot.swervelib.DriveController;
 import frc.robot.swervelib.DriveControllerFactory;
 import frc.robot.swervelib.ModuleConfiguration;
@@ -19,7 +20,10 @@ public final class NeoDriveControllerFactoryBuilder
 
     public NeoDriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) 
     {
+        Util.consoleLog();
+    
         this.nominalVoltage = nominalVoltage;
+
         return this;
     }
 
@@ -41,6 +45,8 @@ public final class NeoDriveControllerFactoryBuilder
 
     public DriveControllerFactory<ControllerImplementation, Integer> build() 
     {
+        Util.consoleLog();
+    
         return new FactoryImplementation();
     }
 
@@ -49,6 +55,8 @@ public final class NeoDriveControllerFactoryBuilder
         @Override
         public ControllerImplementation create(Integer id, ModuleConfiguration moduleConfiguration) 
         {
+            Util.consoleLog();
+    
             CANSparkMax motor = new CANSparkMax(id, CANSparkMaxLowLevel.MotorType.kBrushless);
 
             motor.restoreFactoryDefaults(); // 4450
@@ -86,6 +94,8 @@ public final class NeoDriveControllerFactoryBuilder
 
         private ControllerImplementation(CANSparkMax motor, RelativeEncoder encoder) 
         {
+            Util.consoleLog();
+    
             this.motor = motor;
             this.encoder = encoder;
         }
@@ -129,6 +139,8 @@ public final class NeoDriveControllerFactoryBuilder
         @Override
         public void setBrakeMode(boolean on) 
         {
+            Util.consoleLog("%b", on);
+    
             if (on)
                 motor.setIdleMode(IdleMode.kBrake);
             else

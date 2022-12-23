@@ -1,5 +1,6 @@
 package frc.robot.swervelib;
 
+import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
 @FunctionalInterface
@@ -9,6 +10,8 @@ public interface SteerControllerFactory<Controller extends SteerController, Stee
             ShuffleboardContainer container,
             Controller controller) 
     {
+        Util.consoleLog();
+    
         container.addNumber("2 Current Angle", () -> Math.toDegrees(controller.getStateAngle()));
         container.addNumber("3 Target Angle", () -> Math.toDegrees(controller.getReferenceAngle()));
     }
@@ -18,6 +21,8 @@ public interface SteerControllerFactory<Controller extends SteerController, Stee
             SteerConfiguration steerConfiguration,
             ModuleConfiguration moduleConfiguration) 
     {
+        Util.consoleLog();
+    
         var controller = create(steerConfiguration, moduleConfiguration);
 
         addDashboardEntries(dashboardContainer, controller);

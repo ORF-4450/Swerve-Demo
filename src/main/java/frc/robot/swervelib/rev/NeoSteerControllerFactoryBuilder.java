@@ -3,6 +3,7 @@ package frc.robot.swervelib.rev;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import Team4450.Lib.Util;
 import frc.robot.swervelib.*;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
@@ -20,9 +21,12 @@ public final class NeoSteerControllerFactoryBuilder
 
     public NeoSteerControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) 
     {
+        Util.consoleLog();
+    
         this.pidProportional = proportional;
         this.pidIntegral = integral;
         this.pidDerivative = derivative;
+        
         return this;
     }
 
@@ -55,6 +59,8 @@ public final class NeoSteerControllerFactoryBuilder
 
     public <T> SteerControllerFactory<ControllerImplementation, NeoSteerConfiguration<T>> build(AbsoluteEncoderFactory<T> encoderFactory) 
     {
+        Util.consoleLog();
+    
         return new FactoryImplementation<>(encoderFactory);
     }
 
@@ -64,12 +70,16 @@ public final class NeoSteerControllerFactoryBuilder
 
         public FactoryImplementation(AbsoluteEncoderFactory<T> encoderFactory) 
         {
+            Util.consoleLog();
+    
             this.encoderFactory = encoderFactory;
         }
 
         @Override
         public void addDashboardEntries(ShuffleboardContainer container, ControllerImplementation controller) 
         {
+            Util.consoleLog();
+    
             container.addNumber("1 Absolute Encoder Angle", 
                     () -> Math.toDegrees(controller.absoluteEncoder.getAbsoluteAngle()));
 
@@ -79,6 +89,8 @@ public final class NeoSteerControllerFactoryBuilder
         @Override
         public ControllerImplementation create(NeoSteerConfiguration<T> steerConfiguration, ModuleConfiguration moduleConfiguration) 
         {
+            Util.consoleLog();
+    
             AbsoluteEncoder absoluteEncoder = encoderFactory.create(steerConfiguration.getEncoderConfiguration());
 
             CANSparkMax motor = new CANSparkMax(steerConfiguration.getMotorPort(), CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -135,6 +147,8 @@ public final class NeoSteerControllerFactoryBuilder
 
         public ControllerImplementation(CANSparkMax motor, AbsoluteEncoder absoluteEncoder) 
         {
+            Util.consoleLog();
+    
             this.motor = motor;
             this.controller = motor.getPIDController();
             this.motorEncoder = motor.getEncoder();
@@ -150,6 +164,8 @@ public final class NeoSteerControllerFactoryBuilder
         @Override
         public void setPidConstants(double proportional, double integral, double derivative)
         {
+            Util.consoleLog();
+    
             checkNeoError(controller.setP(proportional), "Failed to set NEO PID proportional constant");
             checkNeoError(controller.setI(integral), "Failed to set NEO PID integral constant");
             checkNeoError(controller.setD(derivative), "Failed to set NEO PID derivative constant");

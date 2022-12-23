@@ -1,5 +1,6 @@
 package frc.robot.swervelib;
 
+import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
 @FunctionalInterface
@@ -7,6 +8,8 @@ public interface DriveControllerFactory<Controller extends DriveController, Driv
 {
     default void addDashboardEntries(ShuffleboardContainer container, Controller controller) 
     {
+        Util.consoleLog();
+    
         container.addNumber("4 Current Velocity", controller::getStateVelocity);
     }
 
@@ -15,6 +18,8 @@ public interface DriveControllerFactory<Controller extends DriveController, Driv
             DriveConfiguration driveConfiguration,
             ModuleConfiguration moduleConfiguration) 
     {
+        Util.consoleLog();
+    
         var controller = create(driveConfiguration, moduleConfiguration);
         
         addDashboardEntries(container, controller);

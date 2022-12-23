@@ -5,13 +5,12 @@
 package frc.robot;
 
 import Team4450.Lib.Util;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.SwerveDriveBase;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,7 +21,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class RobotContainer 
 {
   // The robot's subsystems and commands are defined here.
-  public final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public final SwerveDriveBase m_drivetrainSubsystem = new SwerveDriveBase();
 
   private final XboxController m_controller = new XboxController(0);
 
@@ -44,7 +43,7 @@ public class RobotContainer
     // This is handled here by swapping the inputs. Note that first axis parameter below
     // is the X wheelspeeds input and the second is Y wheelspeeds input.
 
-    m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
+    m_drivetrainSubsystem.setDefaultCommand(new SwerveDriveCommand(
             m_drivetrainSubsystem,
             () -> m_controller.getRightY() + m_controller.getLeftY(),
             () -> m_controller.getRightX(),

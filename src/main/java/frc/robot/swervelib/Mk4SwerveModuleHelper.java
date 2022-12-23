@@ -14,7 +14,7 @@ public final class Mk4SwerveModuleHelper
     private static DriveControllerFactory<?, Integer> getFalcon500DriveFactory(Mk4ModuleConfiguration configuration) 
     {
         return new Falcon500DriveControllerFactoryBuilder()
-                .withVoltageCompensation(configuration.getNominalVoltage())
+                .withVoltageCompensation(configuration.getNominalDriveVoltage())
                 .withCurrentLimit(configuration.getDriveCurrentLimit())
                 .build();
     }
@@ -22,7 +22,7 @@ public final class Mk4SwerveModuleHelper
     private static SteerControllerFactory<?, Falcon500SteerConfiguration<CanCoderAbsoluteConfiguration>> getFalcon500SteerFactory(Mk4ModuleConfiguration configuration) 
     {
         return new Falcon500SteerControllerFactoryBuilder()
-                .withVoltageCompensation(configuration.getNominalVoltage())
+                .withVoltageCompensation(configuration.getNominalSteerVoltage())
                 .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD())
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .build(new CanCoderFactoryBuilder()
@@ -33,7 +33,7 @@ public final class Mk4SwerveModuleHelper
     private static DriveControllerFactory<?, Integer> getNeoDriveFactory(Mk4ModuleConfiguration configuration) 
     {
         return new NeoDriveControllerFactoryBuilder()
-                .withVoltageCompensation(configuration.getNominalVoltage())
+                .withVoltageCompensation(configuration.getNominalDriveVoltage())
                 .withCurrentLimit(configuration.getDriveCurrentLimit())
                 .build();
     }
@@ -41,7 +41,7 @@ public final class Mk4SwerveModuleHelper
     private static SteerControllerFactory<?, NeoSteerConfiguration<CanCoderAbsoluteConfiguration>> getNeoSteerFactory(Mk4ModuleConfiguration configuration) 
     {
         return new NeoSteerControllerFactoryBuilder()
-                .withVoltageCompensation(configuration.getNominalVoltage())
+                .withVoltageCompensation(configuration.getNominalSteerVoltage())
                 .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD()) // PID parms customized by 4450.
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .build(new CanCoderFactoryBuilder()
