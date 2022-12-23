@@ -35,6 +35,7 @@ public final class Mk4SwerveModuleHelper
         return new NeoDriveControllerFactoryBuilder()
                 .withVoltageCompensation(configuration.getNominalDriveVoltage())
                 .withCurrentLimit(configuration.getDriveCurrentLimit())
+                .withRampRate(configuration.getDriveRampRate())
                 .build();
     }
 
@@ -44,6 +45,7 @@ public final class Mk4SwerveModuleHelper
                 .withVoltageCompensation(configuration.getNominalSteerVoltage())
                 .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD()) // PID parms customized by 4450.
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
+                .withRampRate(configuration.getSteerRampRate())
                 .build(new CanCoderFactoryBuilder()
                         .withReadingUpdatePeriod(100)
                         .build());

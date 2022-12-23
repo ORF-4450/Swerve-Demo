@@ -33,6 +33,9 @@ public final class Constants
 
     public static final double  STEER_MAX_VOLTAGE = 12.0;
     public static final double  DRIVE_MAX_VOLTAGE = 12.0;
+ 
+    public static final double  DRIVE_RAMP_RATE = 0.0;
+    public static final double  STEER_RAMP_RATE = 0.0;
 
     /**
      * The left-to-right distance between the drivetrain wheels

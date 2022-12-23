@@ -12,12 +12,13 @@ import static frc.robot.swervelib.rev.RevUtils.checkNeoError;
 public final class NeoSteerControllerFactoryBuilder
 {
     // PID configuration
-    private double pidProportional = Double.NaN;
-    private double pidIntegral = Double.NaN;
-    private double pidDerivative = Double.NaN;
+    private double pidProportional  = Double.NaN;
+    private double pidIntegral      = Double.NaN;
+    private double pidDerivative    = Double.NaN;
 
-    private double nominalVoltage = Double.NaN;
-    private double currentLimit = Double.NaN;
+    private double nominalVoltage   = Double.NaN;
+    private double currentLimit     = Double.NaN;
+    private double rampRate         = Double.NaN;
 
     public NeoSteerControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) 
     {
@@ -55,6 +56,17 @@ public final class NeoSteerControllerFactoryBuilder
     public boolean hasCurrentLimit() 
     {
         return Double.isFinite(currentLimit);
+    }
+
+    public NeoSteerControllerFactoryBuilder withRampRate(double rampRate) 
+    {
+        this.rampRate = rampRate;
+        return this;
+    }
+
+    public boolean hasRampRate() 
+    {
+        return Double.isFinite(rampRate);
     }
 
     public <T> SteerControllerFactory<ControllerImplementation, NeoSteerConfiguration<T>> build(AbsoluteEncoderFactory<T> encoderFactory) 
@@ -109,6 +121,9 @@ public final class NeoSteerControllerFactoryBuilder
             
             if (hasCurrentLimit())
                 checkNeoError(motor.setSmartCurrentLimit((int) Math.round(currentLimit)), "Failed to set NEO current limits");
+            
+            if (hasRampRate())
+                checkNeoError(motor.setOpenLoopRampRate(rampRate), "Failed to set NEO ramp rate");
             
             RelativeEncoder integratedEncoder = motor.getEncoder();
 

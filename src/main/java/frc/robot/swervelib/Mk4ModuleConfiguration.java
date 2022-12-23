@@ -16,6 +16,9 @@ public class Mk4ModuleConfiguration
                                                                 // that will be output by controller.
     private double nominalSteerVoltage  = STEER_MAX_VOLTAGE;
 
+    private double driveRampRate = DRIVE_RAMP_RATE;
+    private double steerRampRate = STEER_RAMP_RATE;
+
     private double driveCurrentLimit    = DRIVE_MAX_CURRENT;
     private double steerCurrentLimit    = STEER_MAX_CURRENT;
 
@@ -41,6 +44,14 @@ public class Mk4ModuleConfiguration
     public double getSteerCurrentLimit() { return steerCurrentLimit; }
 
     public void setSteerCurrentLimit(double steerCurrentLimit) { this.steerCurrentLimit = steerCurrentLimit; }
+
+    public double getDriveRampRate() { return driveRampRate; }
+
+    public void setDriveRampRate(double rampRate) { this.driveRampRate = rampRate; }
+
+    public double getSteerRampRate() { return steerRampRate; }
+
+    public void setSteerRampRate(double rampRate) { this.steerRampRate = rampRate; }
 
     @Override
     public boolean equals(Object o)

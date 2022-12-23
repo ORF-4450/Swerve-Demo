@@ -50,6 +50,7 @@ public final class Mk4iSwerveModuleHelper
                 .withVoltageCompensation(configuration.getNominalSteerVoltage())
                 .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD())
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
+                .withRampRate(.60)
                 .build(new CanCoderFactoryBuilder()
                         .withReadingUpdatePeriod(100)
                         .build());

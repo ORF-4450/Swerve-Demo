@@ -15,8 +15,9 @@ import static frc.robot.swervelib.rev.RevUtils.checkNeoError;
 
 public final class NeoDriveControllerFactoryBuilder 
 {
-    private double nominalVoltage = Double.NaN;
-    private double currentLimit = Double.NaN;
+    private double nominalVoltage   = Double.NaN;
+    private double currentLimit     = Double.NaN;
+    private double rampRate         = Double.NaN;
 
     public NeoDriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) 
     {
@@ -41,6 +42,17 @@ public final class NeoDriveControllerFactoryBuilder
     public boolean hasCurrentLimit() 
     {
         return Double.isFinite(currentLimit);
+    }
+
+    public NeoDriveControllerFactoryBuilder withRampRate(double rampRate) 
+    {
+        this.rampRate = rampRate;
+        return this;
+    }
+
+    public boolean hasRampRate() 
+    {
+        return Double.isFinite(rampRate);
     }
 
     public DriveControllerFactory<ControllerImplementation, Integer> build() 
@@ -69,6 +81,9 @@ public final class NeoDriveControllerFactoryBuilder
 
             if (hasCurrentLimit()) 
                 checkNeoError(motor.setSmartCurrentLimit((int) currentLimit), "Failed to set current limit for NEO");
+            
+            if (hasRampRate())
+                checkNeoError(motor.setOpenLoopRampRate(rampRate), "Failed to set NEO ramp rate");
 
             checkNeoError(motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 100), "Failed to set periodic status frame 0 rate");
             checkNeoError(motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20), "Failed to set periodic status frame 1 rate");
