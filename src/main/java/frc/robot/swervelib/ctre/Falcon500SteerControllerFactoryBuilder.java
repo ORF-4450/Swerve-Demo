@@ -27,8 +27,9 @@ public final class Falcon500SteerControllerFactoryBuilder
     private double accelerationConstant = Double.NaN;
     private double staticConstant = Double.NaN;
 
-    private double nominalVoltage = Double.NaN;
-    private double currentLimit = Double.NaN;
+    private double nominalVoltage   = Double.NaN;
+    private double currentLimit     = Double.NaN;
+    private double rampRate         = Double.NaN;
 
     public Falcon500SteerControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) 
     {
@@ -76,6 +77,17 @@ public final class Falcon500SteerControllerFactoryBuilder
     public boolean hasCurrentLimit() 
     {
         return Double.isFinite(currentLimit);
+    }
+
+    public Falcon500SteerControllerFactoryBuilder withRampRate(double rampRate) 
+    {
+        this.rampRate = rampRate;
+        return this;
+    }
+
+    public boolean hasRampRate() 
+    {
+        return Double.isFinite(rampRate);
     }
 
     public <T> SteerControllerFactory<ControllerImplementation, Falcon500SteerConfiguration<T>> build(AbsoluteEncoderFactory<T> absoluteEncoderFactory) 
@@ -130,6 +142,8 @@ public final class Falcon500SteerControllerFactoryBuilder
             }
 
             if (hasVoltageCompensation()) motorConfiguration.voltageCompSaturation = nominalVoltage;
+
+            if (hasRampRate()) motorConfiguration.closedloopRamp = rampRate;
 
             if (hasCurrentLimit()) 
             {

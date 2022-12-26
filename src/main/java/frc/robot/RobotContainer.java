@@ -45,7 +45,7 @@ public class RobotContainer
 
     m_drivetrainSubsystem.setDefaultCommand(new SwerveDriveCommand(
             m_drivetrainSubsystem,
-            () -> m_controller.getRightY() + m_controller.getLeftY(),
+            () -> m_controller.getRightY() + m_controller.getLeftY(), // test throttle on both sticks.
             () -> m_controller.getRightX(),
             () -> m_controller.getLeftX(),
             m_controller

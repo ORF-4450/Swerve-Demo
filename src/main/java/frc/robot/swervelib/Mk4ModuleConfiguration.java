@@ -2,8 +2,6 @@ package frc.robot.swervelib;
 
 import java.util.Objects;
 
-import static frc.robot.Constants.*;
-
 /**
  * Additional Mk4 module configuration parameters.
  * <p>
@@ -12,22 +10,32 @@ import static frc.robot.Constants.*;
  */
 public class Mk4ModuleConfiguration 
 {
-    private double nominalDriveVoltage  = DRIVE_MAX_VOLTAGE;    // Voltage compensation value. This is max voltate
-                                                                // that will be output by controller.
-    private double nominalSteerVoltage  = STEER_MAX_VOLTAGE;
+    private double nominalDriveVoltage  = 12;    // Voltage compensation value. This is max voltage
+                                                 // that will be output by controller. Zero is off.
+    private double nominalSteerVoltage  = 12;
 
-    private double driveRampRate = DRIVE_RAMP_RATE;
-    private double steerRampRate = STEER_RAMP_RATE;
+    // % output/second. 0 is off.
+    private double driveRampRate        = 0.0;
+    private double steerRampRate        = 0.0;
 
-    private double driveCurrentLimit    = DRIVE_MAX_CURRENT;
-    private double steerCurrentLimit    = STEER_MAX_CURRENT;
+    private double driveCurrentLimit    = 20;   // amps.
+    private double steerCurrentLimit    = 20;
 
     // Steer PID values for Neo. Customized by 4450.
-    private double steerP = STEER_PID_P, steerI = STEER_PID_I, steerD = STEER_PID_D;
+    private double steerP = .50;
+    private double steerI = .0; 
+    private double steerD = .05;
 
     public double getSteerP() { return steerP; }
     public double getSteerI() { return steerI; }
     public double getSteerD() { return steerD; }
+
+    public void setSteerPid(double p, double i, double d)
+    {
+        steerP = p;
+        steerI = i;
+        steerD = d;
+    }
 
     public double getNominalDriveVoltage() { return nominalDriveVoltage; }
 
@@ -64,6 +72,11 @@ public class Mk4ModuleConfiguration
 
         return Double.compare(that.getNominalDriveVoltage(), getNominalDriveVoltage()) == 0 && 
                               Double.compare(that.getNominalSteerVoltage(), getNominalSteerVoltage()) == 0 &&
+                              Double.compare(that.getDriveRampRate(), getDriveRampRate()) == 0 && 
+                              Double.compare(that.getSteerRampRate(), getSteerRampRate()) == 0 && 
+                              Double.compare(that.getSteerP(), getSteerP()) == 0 && 
+                              Double.compare(that.getSteerI(), getSteerI()) == 0 && 
+                              Double.compare(that.getSteerD(), getSteerD()) == 0 && 
                               Double.compare(that.getDriveCurrentLimit(), getDriveCurrentLimit()) == 0 && 
                               Double.compare(that.getSteerCurrentLimit(), getSteerCurrentLimit()) == 0;
     }
@@ -72,7 +85,8 @@ public class Mk4ModuleConfiguration
     public int hashCode() 
     {
         return Objects.hash(getNominalDriveVoltage(), getNominalSteerVoltage(), getDriveCurrentLimit(), 
-                            getSteerCurrentLimit());
+                            getSteerCurrentLimit(), getDriveRampRate(), getSteerRampRate(), getSteerP(),
+                            getSteerI(), getSteerD());
     }
 
     @Override
@@ -83,6 +97,8 @@ public class Mk4ModuleConfiguration
                 ", nominalSteerVoltage=" + nominalSteerVoltage +
                 ", driveCurrentLimit=" + driveCurrentLimit +
                 ", steerCurrentLimit=" + steerCurrentLimit +
+                ", driveRampRate=" + driveRampRate +
+                ", steerRampRate" + steerRampRate +
                 ", p=" + steerP + ", i=" + steerI + ", d=" + steerD +
                 '}';
     }

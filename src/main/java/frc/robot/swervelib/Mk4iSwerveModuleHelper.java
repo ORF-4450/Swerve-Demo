@@ -18,6 +18,7 @@ public final class Mk4iSwerveModuleHelper
         return new Falcon500DriveControllerFactoryBuilder()
                 .withVoltageCompensation(configuration.getNominalDriveVoltage())
                 .withCurrentLimit(configuration.getDriveCurrentLimit())
+                .withRampRate(configuration.getDriveRampRate())
                 .build();
     }
 
@@ -27,6 +28,7 @@ public final class Mk4iSwerveModuleHelper
                 .withVoltageCompensation(configuration.getNominalSteerVoltage())
                 .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD())
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
+                .withRampRate(configuration.getSteerRampRate())
                 .build(new CanCoderFactoryBuilder()
                         .withReadingUpdatePeriod(100)
                         .build());
@@ -39,6 +41,7 @@ public final class Mk4iSwerveModuleHelper
         return new NeoDriveControllerFactoryBuilder()
                 .withVoltageCompensation(configuration.getNominalDriveVoltage())
                 .withCurrentLimit(configuration.getDriveCurrentLimit())
+                .withRampRate(configuration.getDriveRampRate())
                 .build();
     }
 
@@ -50,7 +53,7 @@ public final class Mk4iSwerveModuleHelper
                 .withVoltageCompensation(configuration.getNominalSteerVoltage())
                 .withPidConstants(configuration.getSteerP(), configuration.getSteerI(), configuration.getSteerD())
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
-                .withRampRate(.60)
+                .withRampRate(configuration.getSteerRampRate())
                 .build(new CanCoderFactoryBuilder()
                         .withReadingUpdatePeriod(100)
                         .build());
@@ -244,8 +247,8 @@ public final class Mk4iSwerveModuleHelper
      * @return The configured swerve module.
      */
     public static SwerveModule createNeo(
-        ModulePosition position,
-        ShuffleboardLayout container,
+            ModulePosition position,
+            ShuffleboardLayout container,
             GearRatio gearRatio,
             int driveMotorPort,
             int steerMotorPort,

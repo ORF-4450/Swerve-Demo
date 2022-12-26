@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import Team4450.Lib.Util;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -16,37 +14,21 @@ import Team4450.Lib.Util;
  */
 public final class Constants 
 {
-    public static final String	PROGRAM_NAME = "SDT-12.22.22-1";
+    public static final String	PROGRAM_NAME = "SDT-12.25.22-1";
 
     public static final double  THROTTLE_DEADBAND = .05;
     public static final double  ROTATION_DEADBAND = .05;
-    public static final double  THROTTLE_SLEW = 1.5;
+    public static final double  THROTTLE_SLEW = 1.5;        // rate of change % input/second.
     public static final double  ROTATION_SLEW = 3.0;
-
-    // Steering PID values. Set for Neos on 4450 test base;
-    public static final double  STEER_PID_P = .50;
-    public static final double  STEER_PID_I = 0.0;
-    public static final double  STEER_PID_D = .05;
-
-    public static final double  DRIVE_MAX_CURRENT = 20.0;
-    public static final double  STEER_MAX_CURRENT = 20.0;
-
-    public static final double  STEER_MAX_VOLTAGE = 12.0;
-    public static final double  DRIVE_MAX_VOLTAGE = 12.0;
- 
-    public static final double  DRIVE_RAMP_RATE = 0.0;
-    public static final double  STEER_RAMP_RATE = 0.0;
 
     /**
      * The left-to-right distance between the drivetrain wheels
-     *
      * Should be measured from center to center.
      */
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = .475; //  Measure and set trackwidth
    
     /**
      * The front-to-back distance between the drivetrain wheels.
-     *
      * Should be measured from center to center.
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = .475; // Measure and set wheelbase

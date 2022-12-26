@@ -19,8 +19,9 @@ public final class Falcon500DriveControllerFactoryBuilder {
     private static final int CAN_TIMEOUT_MS = 250;
     private static final int STATUS_FRAME_GENERAL_PERIOD_MS = 250;
 
-    private double nominalVoltage = Double.NaN;
-    private double currentLimit = Double.NaN;
+    private double nominalVoltage   = Double.NaN;
+    private double currentLimit     = Double.NaN;
+    private double rampRate         = Double.NaN;
 
     public Falcon500DriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) {
         this.nominalVoltage = nominalVoltage;
@@ -44,6 +45,17 @@ public final class Falcon500DriveControllerFactoryBuilder {
         return Double.isFinite(currentLimit);
     }
 
+    public Falcon500DriveControllerFactoryBuilder withRampRate(double rampRate) 
+    {
+        this.rampRate = rampRate;
+        return this;
+    }
+
+    public boolean hasRampRate() 
+    {
+        return Double.isFinite(rampRate);
+    }
+
     private class FactoryImplementation implements DriveControllerFactory<ControllerImplementation, Integer> {
         @Override
         public ControllerImplementation create(Integer driveConfiguration, ModuleConfiguration moduleConfiguration) {
@@ -52,9 +64,9 @@ public final class Falcon500DriveControllerFactoryBuilder {
             double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / TICKS_PER_ROTATION;
             double sensorVelocityCoefficient = sensorPositionCoefficient * 10.0;
 
-            if (hasVoltageCompensation()) {
-                motorConfiguration.voltageCompSaturation = nominalVoltage;
-            }
+            if (hasVoltageCompensation()) motorConfiguration.voltageCompSaturation = nominalVoltage;
+
+            if (hasRampRate()) motorConfiguration.closedloopRamp = rampRate;
 
             if (hasCurrentLimit()) {
                 motorConfiguration.supplyCurrLimit.currentLimit = currentLimit;
@@ -64,10 +76,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
             TalonFX motor = new TalonFX(driveConfiguration);
             CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500");
 
-            if (hasVoltageCompensation()) {
-                // Enable voltage compensation
-                motor.enableVoltageCompensation(true);
-            }
+            if (hasVoltageCompensation()) motor.enableVoltageCompensation(true);
 
             motor.setNeutralMode(NeutralMode.Brake);
 
