@@ -151,6 +151,13 @@ public class SwerveDriveBase extends SubsystemBase
     //   Your module has a NEO and a Falcon 500 on it. The NEO is for driving and the Falcon 500 is for steering.
     //
     // Similar helpers also exist for Mk4 modules using the Mk4SwerveModuleHelper class.
+
+    // By default the swerve modules are by default created with the default Mk4ModuleConfiguration object.
+    // The Mk4ModuleConfiguration object contains all of the configurable tuning parameters available for
+    // modules. If you wish to adjust this configuration, create a Mk4MmoduleConfiguration object here and
+    // call it's methods to set the parameters you wish to adjust and then pass that configuration object 
+    // to each of the createNeo calls below, adding the configuration object just ahead of the GearRatio
+    // parameter.
     
     m_frontLeftModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.FL,
