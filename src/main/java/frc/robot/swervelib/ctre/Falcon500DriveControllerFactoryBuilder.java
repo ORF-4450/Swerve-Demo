@@ -1,11 +1,8 @@
 package frc.robot.swervelib.ctre;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -13,7 +10,8 @@ import frc.robot.swervelib.DriveController;
 import frc.robot.swervelib.DriveControllerFactory;
 import frc.robot.swervelib.ModuleConfiguration;
 
-public final class Falcon500DriveControllerFactoryBuilder {
+public final class Falcon500DriveControllerFactoryBuilder 
+{
     private static final double TICKS_PER_ROTATION = 2048.0;
 
     private static final int CAN_TIMEOUT_MS = 250;
@@ -23,25 +21,30 @@ public final class Falcon500DriveControllerFactoryBuilder {
     private double currentLimit     = Double.NaN;
     private double rampRate         = Double.NaN;
 
-    public Falcon500DriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) {
+    public Falcon500DriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) 
+    {
         this.nominalVoltage = nominalVoltage;
         return this;
     }
 
-    public boolean hasVoltageCompensation() {
+    public boolean hasVoltageCompensation() 
+    {
         return Double.isFinite(nominalVoltage);
     }
 
-    public DriveControllerFactory<ControllerImplementation, Integer> build() {
+    public DriveControllerFactory<ControllerImplementation, Integer> build() 
+    {
         return new FactoryImplementation();
     }
 
-    public Falcon500DriveControllerFactoryBuilder withCurrentLimit(double currentLimit) {
+    public Falcon500DriveControllerFactoryBuilder withCurrentLimit(double currentLimit) 
+    {
         this.currentLimit = currentLimit;
         return this;
     }
 
-    public boolean hasCurrentLimit() {
+    public boolean hasCurrentLimit() 
+    {
         return Double.isFinite(currentLimit);
     }
 
@@ -56,9 +59,11 @@ public final class Falcon500DriveControllerFactoryBuilder {
         return Double.isFinite(rampRate);
     }
 
-    private class FactoryImplementation implements DriveControllerFactory<ControllerImplementation, Integer> {
+    private class FactoryImplementation implements DriveControllerFactory<ControllerImplementation, Integer> 
+    {
         @Override
-        public ControllerImplementation create(Integer driveConfiguration, ModuleConfiguration moduleConfiguration) {
+        public ControllerImplementation create(Integer driveConfiguration, ModuleConfiguration moduleConfiguration) 
+        {
             TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
 
             double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / TICKS_PER_ROTATION;
@@ -73,7 +78,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
                 motorConfiguration.supplyCurrLimit.enable = true;
             }
 
-            TalonFX motor = new TalonFX(driveConfiguration);
+            WPI_TalonFX motor = new WPI_TalonFX(driveConfiguration);
             CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500");
 
             if (hasVoltageCompensation()) motor.enableVoltageCompensation(true);
@@ -99,22 +104,25 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
     private class ControllerImplementation implements DriveController 
     {
-        private final TalonFX motor;
+        private final WPI_TalonFX motor;
         private final double sensorVelocityCoefficient;
         private final double nominalVoltage = hasVoltageCompensation() ? Falcon500DriveControllerFactoryBuilder.this.nominalVoltage : 12.0;
 
-        private ControllerImplementation(TalonFX motor, double sensorVelocityCoefficient) {
+        private ControllerImplementation(WPI_TalonFX motor, double sensorVelocityCoefficient) 
+        {
             this.motor = motor;
             this.sensorVelocityCoefficient = sensorVelocityCoefficient;
         }
 
         @Override
-        public void setReferenceVoltage(double voltage) {
+        public void setReferenceVoltage(double voltage) 
+        {
             motor.set(TalonFXControlMode.PercentOutput, voltage / nominalVoltage);
         }
 
         @Override
-        public double getStateVelocity() {
+        public double getStateVelocity() 
+        {
             return motor.getSelectedSensorVelocity() * sensorVelocityCoefficient;
         }
 
@@ -139,7 +147,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
         }
 
         @Override
-        public TalonFX getMotor500() 
+        public WPI_TalonFX getMotor500() 
         {
             return motor;
         }

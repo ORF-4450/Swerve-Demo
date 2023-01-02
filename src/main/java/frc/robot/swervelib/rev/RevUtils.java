@@ -4,6 +4,7 @@ import com.revrobotics.REVLibError;
 
 import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 
 public final class RevUtils 
 {
@@ -15,7 +16,8 @@ public final class RevUtils
         {
             Util.consoleLog("%s: %s", message, error.toString());
 
-            DriverStation.reportError(String.format("%s: %s", message, error.toString()), false);
+            if (RobotBase.isReal()) 
+                DriverStation.reportError(String.format("%s: %s", message, error.toString()), false);
         }
     }
 }

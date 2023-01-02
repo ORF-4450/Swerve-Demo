@@ -54,7 +54,8 @@ public class SwerveDriveBase extends SubsystemBase
   //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
   //  By default this value is setup for a Mk3 standard module using Falcon500s to drive.
   //  An example of this constant for a Mk4 L2 module with NEOs to drive is:
-  //   5880.0 / 60.0 / SdsModuleConfigurations.MK4_L2.getDriveReduction() * SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI
+  //   5880.0 / 60.0 / SdsModuleConfigurations.MK4_L2.getDriveReduction() * 
+  //                   SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI
 
   /**
    * The maximum velocity of the robot in meters per second.
@@ -152,12 +153,12 @@ public class SwerveDriveBase extends SubsystemBase
     //
     // Similar helpers also exist for Mk4 modules using the Mk4SwerveModuleHelper class.
 
-    // By default the swerve modules are by default created with the default Mk4ModuleConfiguration object.
+    // By default the swerve modules are created with the default Mk4ModuleConfiguration object.
     // The Mk4ModuleConfiguration object contains all of the configurable tuning parameters available for
     // modules. If you wish to adjust this configuration, create a Mk4MmoduleConfiguration object here and
     // call it's methods to set the parameters you wish to adjust and then pass that configuration object 
     // to each of the createNeo calls below, adding the configuration object just ahead of the GearRatio
-    // parameter.
+    // parameter. The Mk4ModuleConfiguration is currently customized for Neos.
     
     m_frontLeftModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.FL,

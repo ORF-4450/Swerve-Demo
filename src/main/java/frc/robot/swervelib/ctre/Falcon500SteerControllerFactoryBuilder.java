@@ -1,8 +1,8 @@
 package frc.robot.swervelib.ctre;
 
 import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.swervelib.*;
@@ -151,7 +151,7 @@ public final class Falcon500SteerControllerFactoryBuilder
                 motorConfiguration.supplyCurrLimit.enable = true;
             }
 
-            TalonFX motor = new TalonFX(steerConfiguration.getMotorPort());
+            WPI_TalonFX motor = new WPI_TalonFX(steerConfiguration.getMotorPort());
 
             checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), 
                     "Failed to configure Falcon 500 settings");
@@ -192,7 +192,7 @@ public final class Falcon500SteerControllerFactoryBuilder
         private static final int    ENCODER_RESET_ITERATIONS = 500;
         private static final double ENCODER_RESET_MAX_ANGULAR_VELOCITY = Math.toRadians(0.5);
 
-        private final TalonFX motor;
+        private final WPI_TalonFX motor;
         private final double motorEncoderPositionCoefficient;
         private final double motorEncoderVelocityCoefficient;
         private final TalonFXControlMode motorControlMode;
@@ -202,7 +202,7 @@ public final class Falcon500SteerControllerFactoryBuilder
 
         private double resetIteration = 0;
 
-        private ControllerImplementation(TalonFX motor,
+        private ControllerImplementation(WPI_TalonFX motor,
                                          double motorEncoderPositionCoefficient,
                                          double motorEncoderVelocityCoefficient,
                                          TalonFXControlMode motorControlMode,

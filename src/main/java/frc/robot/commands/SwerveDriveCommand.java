@@ -34,7 +34,7 @@ public class SwerveDriveCommand extends CommandBase
                                XboxController controller) 
     {
         Util.consoleLog();
-        
+
         this.m_drivetrainSubsystem = drivetrainSubsystem;
         this.m_throttleSupplier = throttleSupplier;
         this.m_strafeSupplier = strafeSupplier;
@@ -75,9 +75,9 @@ public class SwerveDriveCommand extends CommandBase
         // strafe = squareTheInput(strafe);
         // rotation = squareTheInput(rotation);
 
-        throttle = m_slewX.calculate(throttle);
-        strafe = m_slewY.calculate(strafe);
-        rotation = m_slewRot.calculate(rotation);
+        //throttle = m_slewX.calculate(throttle);
+        //strafe = m_slewY.calculate(strafe);
+        //rotation = m_slewRot.calculate(rotation);
 
         m_drivetrainSubsystem.drive(throttle, strafe, rotation);
     }
