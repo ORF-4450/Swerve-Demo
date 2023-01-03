@@ -115,7 +115,7 @@ public class Robot extends TimedRobot
     if (m_autonomousCommand != null) m_autonomousCommand.cancel();
 
     // Set swerve modules to forward direction.
-    m_robotContainer.m_drivetrainSubsystem.drive(0, 0, 0, true);
+    //m_robotContainer.m_drivetrainSubsystem.drive(0, 0, 0, true);
   }
 
   /** This function is called periodically during operator control. */

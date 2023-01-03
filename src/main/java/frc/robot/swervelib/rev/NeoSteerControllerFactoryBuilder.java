@@ -152,10 +152,10 @@ public final class NeoSteerControllerFactoryBuilder
         private static final double ENCODER_RESET_MAX_ANGULAR_VELOCITY = Math.toRadians(0.5);
 
         @SuppressWarnings({"FieldCanBeLocal", "unused"})
-        private final CANSparkMax motor;
+        private final CANSparkMax           motor;
         private final SparkMaxPIDController controller;
-        private final RelativeEncoder motorEncoder;
-        private final AbsoluteEncoder absoluteEncoder;
+        private final RelativeEncoder       motorEncoder;
+        private final AbsoluteEncoder       absoluteEncoder;
 
         private double referenceAngleRadians = 0;
         private double resetIteration = 0;
@@ -235,6 +235,7 @@ public final class NeoSteerControllerFactoryBuilder
         public double getStateAngle() 
         {
             double motorAngleRadians = motorEncoder.getPosition();
+
             motorAngleRadians %= 2.0 * Math.PI;
 
             if (motorAngleRadians < 0.0) motorAngleRadians += 2.0 * Math.PI;

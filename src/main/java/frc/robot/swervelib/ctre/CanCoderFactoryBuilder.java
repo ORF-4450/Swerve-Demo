@@ -1,9 +1,7 @@
 package frc.robot.swervelib.ctre;
 
-import java.util.concurrent.atomic.DoubleAdder;
-
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 
@@ -13,8 +11,8 @@ import frc.robot.swervelib.AbsoluteEncoderFactory;
 
 public class CanCoderFactoryBuilder 
 {
-    private Direction direction = Direction.COUNTER_CLOCKWISE;
-    private int periodMilliseconds = 10;
+    private Direction   direction = Direction.COUNTER_CLOCKWISE;
+    private int         periodMilliseconds = 10;
 
     public CanCoderFactoryBuilder withReadingUpdatePeriod(int periodMilliseconds) 
     {
@@ -34,12 +32,13 @@ public class CanCoderFactoryBuilder
     
         return configuration -> {
             CANCoderConfiguration config = new CANCoderConfiguration();
+
             config.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
             config.magnetOffsetDegrees = Math.toDegrees(configuration.getOffset());
             config.sensorDirection = direction == Direction.CLOCKWISE;
             config.initializationStrategy = configuration.getInitStrategy();
 
-            CANCoder encoder = new CANCoder(configuration.getId());
+            WPI_CANCoder encoder = new WPI_CANCoder(configuration.getId());
             
             CtreUtils.checkCtreError(encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
 
@@ -51,9 +50,9 @@ public class CanCoderFactoryBuilder
 
     private static class EncoderImplementation implements AbsoluteEncoder 
     {
-        private final CANCoder  encoder;
+        private final WPI_CANCoder  encoder;
 
-        private EncoderImplementation(CANCoder encoder) 
+        private EncoderImplementation(WPI_CANCoder encoder) 
         {
             Util.consoleLog();
     

@@ -38,7 +38,8 @@ import static frc.robot.Constants.*;
 
 public class SwerveDriveBase extends SubsystemBase 
 {
-  private boolean       autoReturnToZero = false, fieldOriented = true, overrideAutoResetToZero;
+  private boolean       autoReturnToZero = false, fieldOriented = true, overrideAutoReturnToZero;
+  private double        overrideTime;
 
   private SimDouble     simAngle; // navx sim.
 
@@ -294,9 +295,13 @@ public class SwerveDriveBase extends SubsystemBase
    */
   public void drive(double throttle, double strafe, double rotation, boolean override)
   {
-      overrideAutoResetToZero = override;
+      overrideAutoReturnToZero = override;
 
-      if (overrideAutoResetToZero) autoReturnToZero = true;
+      if (overrideAutoReturnToZero) 
+      {
+        autoReturnToZero = true;
+        overrideTime = Util.timeStamp();
+      }
 
       drive(throttle, strafe, rotation);
   }
@@ -313,7 +318,7 @@ public class SwerveDriveBase extends SubsystemBase
     // Convert joystick values into speeds.
 
     throttle *= MAX_VELOCITY_METERS_PER_SECOND;
-    strafe *= MAX_VELOCITY_METERS_PER_SECOND;
+    strafe   *= MAX_VELOCITY_METERS_PER_SECOND;
     rotation *= MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
 
     // Create chassis speeds in either field or robot drive orientation.
@@ -359,9 +364,13 @@ public class SwerveDriveBase extends SubsystemBase
     else
         m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
 
-    if (overrideAutoResetToZero) autoReturnToZero = false;
-
-    overrideAutoResetToZero = false;
+    // Auto return to zero override is in effect for 1 second so motors can move.
+    
+    if (overrideAutoReturnToZero && Util.getElaspedTime(overrideTime) > 1.0)
+    {
+        autoReturnToZero = false;
+        overrideAutoReturnToZero = false;
+    }
 
     updateOdometry(states);
 
@@ -453,15 +462,16 @@ public class SwerveDriveBase extends SubsystemBase
     Unmanaged.feedEnable(20);
   }
 
-  public void toggleAutoResetToZero()
+  public void toggleAutoReturnToZero()
   {
     Util.consoleLog();
     
      autoReturnToZero = !autoReturnToZero;
+
      updateDS();
   }
 
-  public boolean getAutoResetToZero()
+  public boolean getAutoReturnToZero()
   {
      return autoReturnToZero;
   }
@@ -471,6 +481,7 @@ public class SwerveDriveBase extends SubsystemBase
       Util.consoleLog();
     
       fieldOriented = !fieldOriented;
+
       updateDS();
   }
 
@@ -497,6 +508,8 @@ public class SwerveDriveBase extends SubsystemBase
   
   public void resetModulesToAbsolute() 
   {
+      Util.consoleLog("resetModulesToAbsolute");
+
       m_frontLeftModule.resetSteerAngleToAbsolute();
       m_frontRightModule.resetSteerAngleToAbsolute();
       m_backLeftModule.resetSteerAngleToAbsolute();

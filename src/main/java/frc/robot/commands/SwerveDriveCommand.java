@@ -16,7 +16,7 @@ import Team4450.Lib.Util;
 
 public class SwerveDriveCommand extends CommandBase 
 {
-    private final SwerveDriveBase m_drivetrainSubsystem;
+    private final SwerveDriveBase m_driveBase;
 
     private final DoubleSupplier m_throttleSupplier;
     private final DoubleSupplier m_strafeSupplier;
@@ -27,7 +27,7 @@ public class SwerveDriveCommand extends CommandBase
     private final SlewRateLimiter m_slewY = new SlewRateLimiter(THROTTLE_SLEW);
     private final SlewRateLimiter m_slewRot = new SlewRateLimiter(ROTATION_SLEW);
 
-    public SwerveDriveCommand(SwerveDriveBase drivetrainSubsystem,
+    public SwerveDriveCommand(SwerveDriveBase driveBase,
                                DoubleSupplier throttleSupplier,
                                DoubleSupplier strafeSupplier,
                                DoubleSupplier rotationSupplier,
@@ -35,13 +35,13 @@ public class SwerveDriveCommand extends CommandBase
     {
         Util.consoleLog();
 
-        this.m_drivetrainSubsystem = drivetrainSubsystem;
+        this.m_driveBase = driveBase;
         this.m_throttleSupplier = throttleSupplier;
         this.m_strafeSupplier = strafeSupplier;
         this.m_rotationSupplier = rotationSupplier;
         this.m_controller = controller;
 
-        addRequirements(drivetrainSubsystem);
+        addRequirements(driveBase);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class SwerveDriveCommand extends CommandBase
         );
 
         LCD.printLine(2, "gyro=%.3f  yaw=%.3f",
-            m_drivetrainSubsystem.getGyroRotation2d().getDegrees(),
-            m_drivetrainSubsystem.getGyroYaw()
+            m_driveBase.getGyroRotation2d().getDegrees(),
+            m_driveBase.getGyroYaw()
         );
 
         double throttle = -deadband(m_throttleSupplier.getAsDouble(), THROTTLE_DEADBAND);
@@ -79,7 +79,7 @@ public class SwerveDriveCommand extends CommandBase
         //strafe = m_slewY.calculate(strafe);
         //rotation = m_slewRot.calculate(rotation);
 
-        m_drivetrainSubsystem.drive(throttle, strafe, rotation);
+        m_driveBase.drive(throttle, strafe, rotation);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class SwerveDriveCommand extends CommandBase
     {
         Util.consoleLog("interrupted=%b", interrupted);
 
-        m_drivetrainSubsystem.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
+        m_driveBase.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
     }
  
     private static double deadband(double value, double deadband) 

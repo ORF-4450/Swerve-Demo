@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class NeoSteerConfiguration<EncoderConfiguration> 
 {
-    private final int motorPort;
-    private final EncoderConfiguration encoderConfiguration;
+    private final int                   motorPort;
+    private final EncoderConfiguration  encoderConfiguration;
 
     public NeoSteerConfiguration(int motorPort, EncoderConfiguration encoderConfiguration) 
     {

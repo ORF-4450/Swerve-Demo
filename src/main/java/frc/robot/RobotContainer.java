@@ -70,27 +70,25 @@ public class RobotContainer
   {
     // Back button zeros the gyroscope.
     new Button(m_controller::getXButton)
-            // No requirements because we don't need to interrupt anything
-            .whenPressed(m_drivetrainSubsystem::zeroGyro);
+        // No requirements because we don't need to interrupt anything
+        .whenPressed(m_drivetrainSubsystem::zeroGyro);
 
     new Button(m_controller::getYButton)
-            .whenPressed(m_drivetrainSubsystem::resetModulesToForward);
+        .whenPressed(m_drivetrainSubsystem::resetModulesToForward);
 
     new Button(m_controller::getAButton)
-            .whenPressed(m_drivetrainSubsystem::resetModulesToAbsolute);
+        .whenPressed(m_drivetrainSubsystem::resetModulesToAbsolute);
 
     new Button(m_controller::getBButton)
-            .whenPressed(m_drivetrainSubsystem::resetModuleEncoders);
+        .whenPressed(m_drivetrainSubsystem::resetModuleEncoders);
 
     // Start button toggles autoRreturnToZero mode.
     new Button(m_controller::getStartButton)
-            // No requirements because we don't need to interrupt anything
-            .whenPressed(m_drivetrainSubsystem::toggleAutoResetToZero);
+        .whenPressed(m_drivetrainSubsystem::toggleAutoReturnToZero);
 
     // Back button toggles field oriented driving mode.
     new Button(m_controller::getBackButton)
-            // No requirements because we don't need to interrupt anything
-            .whenPressed(m_drivetrainSubsystem::toggleFieldOriented);
+        .whenPressed(m_drivetrainSubsystem::toggleFieldOriented);
   }
 
   /**

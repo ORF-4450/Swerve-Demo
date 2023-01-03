@@ -19,13 +19,13 @@ public final class Falcon500SteerControllerFactoryBuilder
 
     // PID configuration
     private double proportionalConstant = Double.NaN;
-    private double integralConstant = Double.NaN;
-    private double derivativeConstant = Double.NaN;
+    private double integralConstant     = Double.NaN;
+    private double derivativeConstant    = Double.NaN;
 
     // Motion magic configuration
-    private double velocityConstant = Double.NaN;
+    private double velocityConstant     = Double.NaN;
     private double accelerationConstant = Double.NaN;
-    private double staticConstant = Double.NaN;
+    private double staticConstant       = Double.NaN;
 
     private double nominalVoltage   = Double.NaN;
     private double currentLimit     = Double.NaN;
@@ -192,11 +192,12 @@ public final class Falcon500SteerControllerFactoryBuilder
         private static final int    ENCODER_RESET_ITERATIONS = 500;
         private static final double ENCODER_RESET_MAX_ANGULAR_VELOCITY = Math.toRadians(0.5);
 
-        private final WPI_TalonFX motor;
-        private final double motorEncoderPositionCoefficient;
-        private final double motorEncoderVelocityCoefficient;
-        private final TalonFXControlMode motorControlMode;
-        private final AbsoluteEncoder absoluteEncoder;
+        private final WPI_TalonFX   motor;
+        private final double        motorEncoderPositionCoefficient;
+        private final double        motorEncoderVelocityCoefficient;
+
+        private final TalonFXControlMode    motorControlMode;
+        private final AbsoluteEncoder       absoluteEncoder;
 
         private double referenceAngleRadians = 0.0;
 
@@ -226,7 +227,7 @@ public final class Falcon500SteerControllerFactoryBuilder
         {
             double currentAngleRadians = motor.getSelectedSensorPosition() * motorEncoderPositionCoefficient;
 
-            // Reset the NEO's encoder periodically when the module is not rotating.
+            // Reset the Falcons encoder periodically when the module is not rotating.
             // Sometimes (~5% of the time) when we initialize, the absolute encoder isn't fully set up, and we don't
             // end up getting a good reading. If we reset periodically this won't matter anymore.
             
@@ -264,6 +265,7 @@ public final class Falcon500SteerControllerFactoryBuilder
         public double getStateAngle() 
         {
             double motorAngleRadians = motor.getSelectedSensorPosition() * motorEncoderPositionCoefficient;
+
             motorAngleRadians %= 2.0 * Math.PI;
 
             if (motorAngleRadians < 0.0) motorAngleRadians += 2.0 * Math.PI;
@@ -280,7 +282,7 @@ public final class Falcon500SteerControllerFactoryBuilder
         @Override
         public void setPidConstants(double proportional, double integral, double derivative)
         {
-            // Neo code here to remind what needs to be done here. controller is the motors
+            // TODO Neo code here to remind what needs to be done here. controller is the motors
             // on board pid loop assuming that is how 500s are set up.
             // checkNeoError(controller.setP(proportional), "Failed to set NEO PID proportional constant");
             // checkNeoError(controller.setI(integral), "Failed to set NEO PID integral constant");
