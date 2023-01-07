@@ -10,7 +10,7 @@ public interface DriveControllerFactory<Controller extends DriveController, Driv
     {
         Util.consoleLog();
     
-        container.addNumber("4 Current Velocity", controller::getStateVelocity);
+        container.addNumber("Current Velocity", controller::getStateVelocity);
     }
 
     default Controller create(

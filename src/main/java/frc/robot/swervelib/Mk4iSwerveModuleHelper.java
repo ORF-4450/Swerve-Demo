@@ -122,7 +122,7 @@ public final class Mk4iSwerveModuleHelper
         return createFalcon500(
             position,
             container, 
-            new Mk4ModuleConfiguration(), 
+            Mk4ModuleConfiguration.getDefault500Config(), 
             gearRatio, 
             driveMotorPort, 
             steerMotorPort, 
@@ -185,7 +185,7 @@ public final class Mk4iSwerveModuleHelper
     {
         return createFalcon500(
             position,
-            new Mk4ModuleConfiguration(), 
+            Mk4ModuleConfiguration.getDefault500Config(), 
             gearRatio, 
             driveMotorPort, 
             steerMotorPort, 
@@ -260,7 +260,7 @@ public final class Mk4iSwerveModuleHelper
         return createNeo(
             position, 
             container, 
-            new Mk4ModuleConfiguration(), 
+            Mk4ModuleConfiguration.getDefaultNeoConfig(), 
             gearRatio, 
             driveMotorPort, 
             steerMotorPort, 
@@ -327,7 +327,7 @@ public final class Mk4iSwerveModuleHelper
     
         return createNeo(
             position, 
-            new Mk4ModuleConfiguration(), 
+            Mk4ModuleConfiguration.getDefaultNeoConfig(), 
             gearRatio, 
             driveMotorPort, 
             steerMotorPort, 
@@ -398,7 +398,7 @@ public final class Mk4iSwerveModuleHelper
         return createFalcon500Neo(
             position,
             container, 
-            new Mk4ModuleConfiguration(), 
+            Mk4ModuleConfiguration.getDefaultNeoConfig(), 
             gearRatio, 
             driveMotorPort, 
             steerMotorPort, 
@@ -461,7 +461,7 @@ public final class Mk4iSwerveModuleHelper
     {
         return createFalcon500Neo(
             position,
-            new Mk4ModuleConfiguration(), 
+            Mk4ModuleConfiguration.getDefaultNeoConfig(), 
             gearRatio, 
             driveMotorPort, 
             steerMotorPort, 
@@ -532,7 +532,7 @@ public final class Mk4iSwerveModuleHelper
         return createNeoFalcon500(
             position,
             container, 
-            new Mk4ModuleConfiguration(), 
+            Mk4ModuleConfiguration.getDefault500Config(), 
             gearRatio, 
             driveMotorPort, 
             steerMotorPort, 
@@ -595,7 +595,7 @@ public final class Mk4iSwerveModuleHelper
     {
         return createNeoFalcon500(
             position,
-            new Mk4ModuleConfiguration(), 
+            Mk4ModuleConfiguration.getDefault500Config(), 
             gearRatio, 
             driveMotorPort, 
             steerMotorPort, 

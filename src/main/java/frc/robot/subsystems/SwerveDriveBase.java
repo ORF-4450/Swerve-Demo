@@ -39,6 +39,7 @@ import static frc.robot.Constants.*;
 public class SwerveDriveBase extends SubsystemBase 
 {
   private boolean       autoReturnToZero = false, fieldOriented = true, overrideAutoReturnToZero;
+  private boolean       overrideExecute;
   private double        overrideTime;
 
   private SimDouble     simAngle; // navx sim.
@@ -149,7 +150,7 @@ public class SwerveDriveBase extends SubsystemBase
     // Mk4iSwerveModuleHelper.createFalcon500Neo(...)
     //   Your module has a Falcon 500 and a NEO on it. The Falcon 500 is for driving and the NEO is for steering.
     //
-    // Mk49SwerveModuleHelper.createNeoFalcon500(...)
+    // Mk4iSwerveModuleHelper.createNeoFalcon500(...)
     //   Your module has a NEO and a Falcon 500 on it. The NEO is for driving and the Falcon 500 is for steering.
     //
     // Similar helpers also exist for Mk4 modules using the Mk4SwerveModuleHelper class.
@@ -333,12 +334,19 @@ public class SwerveDriveBase extends SubsystemBase
    */
   @Override
   public void periodic() 
-  {
+  {    
+    if (overrideExecute)
+    {
+        if (Util.getElaspedTime(overrideTime) > 1.0)
+            overrideExecute = false;
+        else
+            return;
+    }
+
     LCD.printLine(3, "max vel=%.3fms  max ang vel=%.3frs  voltage=%.1f",
         MAX_VELOCITY_METERS_PER_SECOND,
         MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-        MAX_VOLTAGE
-    );
+        MAX_VOLTAGE);
 
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
     
@@ -364,8 +372,9 @@ public class SwerveDriveBase extends SubsystemBase
     else
         m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
 
-    // Auto return to zero override is in effect for 1 second so motors can move.
-    
+    // Auto return to zero override is in effect for 1 second so motors can move independantly
+    // of auto return setting.
+
     if (overrideAutoReturnToZero && Util.getElaspedTime(overrideTime) > 1.0)
     {
         autoReturnToZero = false;
@@ -509,6 +518,9 @@ public class SwerveDriveBase extends SubsystemBase
   public void resetModulesToAbsolute() 
   {
       Util.consoleLog("resetModulesToAbsolute");
+
+      overrideExecute = true;
+      overrideTime = Util.timeStamp();
 
       m_frontLeftModule.resetSteerAngleToAbsolute();
       m_frontRightModule.resetSteerAngleToAbsolute();

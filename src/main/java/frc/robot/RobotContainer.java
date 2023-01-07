@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.commands.ResetToAbsoluteCommand;
+import frc.robot.commands.ResetToForwardCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveDriveBase;
 
@@ -21,7 +23,8 @@ import frc.robot.subsystems.SwerveDriveBase;
 public class RobotContainer 
 {
   // The robot's subsystems and commands are defined here.
-  public final SwerveDriveBase m_drivetrainSubsystem = new SwerveDriveBase();
+
+  public final SwerveDriveBase m_driveBase = new SwerveDriveBase();
 
   private final XboxController m_controller = new XboxController(0);
 
@@ -43,21 +46,13 @@ public class RobotContainer
     // This is handled here by swapping the inputs. Note that first axis parameter below
     // is the X wheelspeeds input and the second is Y wheelspeeds input.
 
-    m_drivetrainSubsystem.setDefaultCommand(new SwerveDriveCommand(
-            m_drivetrainSubsystem,
+    m_driveBase.setDefaultCommand(new SwerveDriveCommand(
+            m_driveBase,
             () -> m_controller.getRightY() + m_controller.getLeftY(), // test throttle on both sticks.
             () -> m_controller.getRightX(),
             () -> m_controller.getLeftX(),
             m_controller
     ));
-
-    // m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
-    //         m_drivetrainSubsystem,
-    //         () -> -modifyAxis(m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-    //         () -> -modifyAxis(m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-    //         () -> modifyAxis(m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-    //         m_controller
-    // ));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -71,24 +66,26 @@ public class RobotContainer
     // Back button zeros the gyroscope.
     new Button(m_controller::getXButton)
         // No requirements because we don't need to interrupt anything
-        .whenPressed(m_drivetrainSubsystem::zeroGyro);
+        .whenPressed(m_driveBase::zeroGyro);
 
     new Button(m_controller::getYButton)
-        .whenPressed(m_drivetrainSubsystem::resetModulesToForward);
+        .whenPressed(m_driveBase::resetModulesToForward);
+        //.whenPressed(new ResetToForwardCommand(m_driveBase));
 
     new Button(m_controller::getAButton)
-        .whenPressed(m_drivetrainSubsystem::resetModulesToAbsolute);
+        .whenPressed(m_driveBase::resetModulesToAbsolute);
+        //.whenPressed(new ResetToAbsoluteCommand(m_driveBase));
 
     new Button(m_controller::getBButton)
-        .whenPressed(m_drivetrainSubsystem::resetModuleEncoders);
+        .whenPressed(m_driveBase::resetModuleEncoders);
 
     // Start button toggles autoRreturnToZero mode.
     new Button(m_controller::getStartButton)
-        .whenPressed(m_drivetrainSubsystem::toggleAutoReturnToZero);
+        .whenPressed(m_driveBase::toggleAutoReturnToZero);
 
     // Back button toggles field oriented driving mode.
     new Button(m_controller::getBackButton)
-        .whenPressed(m_drivetrainSubsystem::toggleFieldOriented);
+        .whenPressed(m_driveBase::toggleFieldOriented);
   }
 
   /**

@@ -22,9 +22,21 @@ public class Mk4ModuleConfiguration
     private double steerCurrentLimit    = 20;
 
     // Steer PID values for Neo. Customized by 4450.
-    private double steerP = 0.50;
-    private double steerI = 0.0; 
-    private double steerD = 0.05;
+    private static final double DEFAULT_NEO_P = 0.5;
+    private static final double DEFAULT_NEO_I = 0.0;
+    private static final double DEFAULT_NEO_D = 0.05;
+
+    private static final double DEFAULT_500_P = 0.2;
+    private static final double DEFAULT_500_I = 0.0;
+    private static final double DEFAULT_500_D = 0.1;
+
+    private double steerP = DEFAULT_NEO_P;
+    private double steerI = DEFAULT_NEO_I; 
+    private double steerD = DEFAULT_NEO_D;
+
+    // Private constructor prevents this class from being created with the new
+    // operator. Use the static factory methods below to create new instances.
+    private Mk4ModuleConfiguration () {}
 
     public double getSteerP() { return steerP; }
     public double getSteerI() { return steerI; }
@@ -107,7 +119,7 @@ public class Mk4ModuleConfiguration
     {
         Mk4ModuleConfiguration config = new Mk4ModuleConfiguration();
 
-        config.setSteerPid(0.2, 0.0, 0.1);
+        config.setSteerPid(DEFAULT_500_P, DEFAULT_500_I, DEFAULT_500_D);
 
         return config;
     }
@@ -116,7 +128,7 @@ public class Mk4ModuleConfiguration
     {
         Mk4ModuleConfiguration config = new Mk4ModuleConfiguration();
 
-        config.setSteerPid(0.5, 0.0, 0.05);
+        config.setSteerPid(DEFAULT_NEO_P, DEFAULT_NEO_I, DEFAULT_NEO_D);
 
         return config;
     }

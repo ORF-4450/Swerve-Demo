@@ -87,6 +87,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
 
                 //driveController.getMotorNeo().getPIDController().setP(1, 3);
             }
+
+            resetSteerAngleToAbsolute();
         }
 
         @Override

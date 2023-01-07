@@ -92,7 +92,7 @@ public final class NeoSteerControllerFactoryBuilder
         {
             Util.consoleLog();
     
-            container.addNumber("1 Absolute Encoder Angle", 
+            container.addNumber("Absolute Encoder Angle", 
                     () -> Math.toDegrees(controller.absoluteEncoder.getAbsoluteAngle()));
 
             SteerControllerFactory.super.addDashboardEntries(container, controller);

@@ -1,4 +1,5 @@
 package frc.robot.swervelib;
 
-public class SwerveModuleFactoryBuilder {
+public class SwerveModuleFactoryBuilder 
+{
 }
