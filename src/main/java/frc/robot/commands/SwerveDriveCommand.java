@@ -75,9 +75,9 @@ public class SwerveDriveCommand extends CommandBase
         // strafe = squareTheInput(strafe);
         // rotation = squareTheInput(rotation);
 
-        //throttle = m_slewX.calculate(throttle);
-        //strafe = m_slewY.calculate(strafe);
-        //rotation = m_slewRot.calculate(rotation);
+        throttle = m_slewX.calculate(throttle);
+        strafe = m_slewY.calculate(strafe);
+        rotation = m_slewRot.calculate(rotation);
 
         m_driveBase.drive(throttle, strafe, rotation);
     }
