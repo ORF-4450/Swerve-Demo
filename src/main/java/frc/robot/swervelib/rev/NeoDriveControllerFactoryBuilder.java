@@ -75,7 +75,6 @@ public final class NeoDriveControllerFactoryBuilder
 
             motor.setInverted(moduleConfiguration.isDriveInverted());
 
-            // Setup voltage compensation
             if (hasVoltageCompensation())
                 checkNeoError(motor.enableVoltageCompensation(nominalVoltage), "Failed to enable voltage compensation");
 
@@ -118,7 +117,18 @@ public final class NeoDriveControllerFactoryBuilder
         @Override
         public void setReferenceVoltage(double voltage) 
         {
-            motor.setVoltage(voltage);
+            // TODO Test this on robot and if no problems, add to 500 controller.
+            // If voltage is tiny, zero it out so no power to motor when
+            // we are not actually moving.
+            if (Math.abs(voltage) > .25)
+                motor.setVoltage(voltage);
+            else
+                motor.setVoltage(0);
+        }
+
+        public double getVoltage()
+        {
+            return motor.getAppliedOutput();
         }
 
         @Override

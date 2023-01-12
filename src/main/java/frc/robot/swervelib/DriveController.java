@@ -12,6 +12,8 @@ public interface DriveController
 
     double getDistance();
 
+    double getVoltage(); // TODO remove this?
+
     void stop();
     
     public RelativeEncoder getEncoder();

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ResetToAbsoluteCommand;
 import frc.robot.commands.ResetToForwardCommand;
 import frc.robot.commands.SwerveDriveCommand;
@@ -63,33 +64,53 @@ public class RobotContainer
    */
   private void configureButtonBindings() 
   {
-    // TODO: Fix buttons.
-    // Back button zeros the gyroscope.
-    new Button(m_controller::getXButton)
+        
+    new Trigger(() -> m_controller.getXButton())
+        .onTrue(new InstantCommand(m_driveBase::zeroGyro));
+        
+    //new Button(m_controller::getXButton)
         // No requirements because we don't need to interrupt anything
-        .whenPressed(m_driveBase::zeroGyro);
+    //    .whenPressed(m_driveBase::zeroGyro);
+        
+    new Trigger(() -> m_controller.getYButton())
+        .onTrue(new InstantCommand(m_driveBase::setModulesToForward));
 
-    new Button(m_controller::getYButton)
-        .whenPressed(m_driveBase::setModulesToForward);
+    //new Button(m_controller::getYButton)
+    //    .whenPressed(m_driveBase::setModulesToForward);
         //.whenPressed(new ResetToForwardCommand(m_driveBase));
+        
+    new Trigger(() -> m_controller.getAButton())
+        .onTrue(new InstantCommand(m_driveBase::setModulesToAbsolute));
 
-    new Button(m_controller::getAButton)
-        .whenPressed(m_driveBase::setModulesToAbsolute);
+    //new Button(m_controller::getAButton)
+    //    .whenPressed(m_driveBase::setModulesToAbsolute);
         //.whenPressed(new ResetToAbsoluteCommand(m_driveBase));
+        
+    new Trigger(() -> m_controller.getLeftBumper())
+        .onTrue(new InstantCommand(m_driveBase::setModulesToStartPosition));
 
-    new Button(m_controller::getLeftBumper)
-        .whenPressed(m_driveBase::setModulesToStartPosition);
+    //new Button(m_controller::getLeftBumper)
+    //    .whenPressed(m_driveBase::setModulesToStartPosition);
+        
+    new Trigger(() -> m_controller.getBButton())
+        .onTrue(new InstantCommand(m_driveBase::resetModuleEncoders));
 
-    new Button(m_controller::getBButton)
-        .whenPressed(m_driveBase::resetModuleEncoders);
+    //new Button(m_controller::getBButton)
+    //    .whenPressed(m_driveBase::resetModuleEncoders);
 
     // Start button toggles autoRreturnToZero mode.
-    new Button(m_controller::getStartButton)
-        .whenPressed(m_driveBase::toggleAutoReturnToZero);
+    new Trigger(() -> m_controller.getStartButton())
+        .onTrue(new InstantCommand(m_driveBase::toggleAutoReturnToZero));
+    
+    //new Button(m_controller::getStartButton)
+    //    .whenPressed(m_driveBase::toggleAutoReturnToZero);
 
     // Back button toggles field oriented driving mode.
-    new Button(m_controller::getBackButton)
-        .whenPressed(m_driveBase::toggleFieldOriented);
+    new Trigger(() -> m_controller.getBackButton())
+        .onTrue(new InstantCommand(m_driveBase::toggleFieldOriented));
+
+    //new Button(m_controller::getBackButton)
+    //    .whenPressed(m_driveBase::toggleFieldOriented);
   }
 
   /**

@@ -408,6 +408,7 @@ public class SwerveDriveBase extends SubsystemBase
     modulePositions[3] = m_backRightModule.getFieldPosition();
     
     m_odometry.update(getHeadingRotation2d(), modulePositions);
+
     //m_odometry.update(getHeadingRotation2d(), states);
 
     updateModulePose(m_frontLeftModule);
@@ -475,7 +476,7 @@ public class SwerveDriveBase extends SubsystemBase
   public void simulationPeriodic() 
   {
     // Assumes Neos. SIM for 500s not implemented.
-    REVPhysicsSim.getInstance().run();
+    if (robot.isEnabled()) REVPhysicsSim.getInstance().run();
  
     // want to simulate navX gyro changing as robot turns
     // information available is radians per second and this happens every 20ms

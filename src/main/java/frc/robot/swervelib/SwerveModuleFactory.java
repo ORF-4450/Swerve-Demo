@@ -86,7 +86,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
                 // Only Neo implemented.
                 REVPhysicsSim.getInstance().addSparkMax(driveController.getMotorNeo(), DCMotor.getNEO(1));
 
-                driveController.getMotorNeo().getPIDController().setP(1, 3);
+                //driveController.getMotorNeo().getPIDController().setP(1, 3);
             }
 
             resetSteerAngleToAbsolute();

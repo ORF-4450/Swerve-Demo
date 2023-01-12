@@ -15,6 +15,8 @@ package frc.robot;
 public final class Constants 
 {
     public static final String	PROGRAM_NAME = "SDT-01.11.23-7";
+    
+    public static Robot			    robot;
 
     public static final double  THROTTLE_DEADBAND = .05;
     public static final double  ROTATION_DEADBAND = .05;

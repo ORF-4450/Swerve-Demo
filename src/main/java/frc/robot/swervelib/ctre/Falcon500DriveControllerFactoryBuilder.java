@@ -167,5 +167,12 @@ public final class Falcon500DriveControllerFactoryBuilder
             // TODO Auto-generated method stub
             return 0;
         }
+
+        @Override
+        public double getVoltage() 
+        {
+            // TODO Auto-generated method stub
+            return 0;
+        }
     }
 }
