@@ -24,6 +24,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -102,13 +103,18 @@ public class SwerveDriveBase extends SubsystemBase
 
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
+  SwerveModulePosition modulePositions[] = new SwerveModulePosition[]
+      { new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition(),
+        new SwerveModulePosition() }; 
+
   private final SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
-      getGyroRotation2d(),
-      new Pose2d(),
       m_kinematics,
-      VecBuilder.fill(0.1, 0.1, 0.1),
-      VecBuilder.fill(0.05),
-      VecBuilder.fill(0.1, 0.1, 0.1));
+      getGyroRotation2d(),
+      modulePositions,
+      new Pose2d());
+      // VecBuilder.fill(0.1, 0.1, 0.1),
+      // VecBuilder.fill(0.05),
+      // VecBuilder.fill(0.1, 0.1, 0.1));
 
   private final Field2d     field2d = new Field2d();
 
@@ -395,7 +401,14 @@ public class SwerveDriveBase extends SubsystemBase
    */
   public void updateOdometry(SwerveModuleState[] states)
   {
-    m_odometry.update(getHeadingRotation2d(), states);
+    // TODO: Fix this.
+    modulePositions[0] = m_frontLeftModule.getFieldPosition();
+    modulePositions[1] = m_frontRightModule.getFieldPosition();
+    modulePositions[2] = m_backLeftModule.getFieldPosition();
+    modulePositions[3] = m_backRightModule.getFieldPosition();
+    
+    m_odometry.update(getHeadingRotation2d(), modulePositions);
+    //m_odometry.update(getHeadingRotation2d(), states);
 
     updateModulePose(m_frontLeftModule);
     updateModulePose(m_frontRightModule);
@@ -445,7 +458,16 @@ public class SwerveDriveBase extends SubsystemBase
 
   public void setOdometry(Pose2d pose) 
   {
-    m_odometry.resetPosition(pose, pose.getRotation());
+    // TODO: Fix this
+    //m_odometry.resetPosition(pose, pose.getRotation());
+
+    modulePositions[0] = m_frontLeftModule.getFieldPosition();
+    modulePositions[1] = m_frontRightModule.getFieldPosition();
+    modulePositions[2] = m_backLeftModule.getFieldPosition();
+    modulePositions[3] = m_backRightModule.getFieldPosition();
+
+    m_odometry.resetPosition(pose.getRotation(), modulePositions, pose);
+
     m_navx.reset();
   }  
 
@@ -453,7 +475,7 @@ public class SwerveDriveBase extends SubsystemBase
   public void simulationPeriodic() 
   {
     // Assumes Neos. SIM for 500s not implemented.
-    //REVPhysicsSim.getInstance().run();
+    REVPhysicsSim.getInstance().run();
  
     // want to simulate navX gyro changing as robot turns
     // information available is radians per second and this happens every 20ms

@@ -160,5 +160,12 @@ public final class Falcon500DriveControllerFactoryBuilder
             else
                 motor.setNeutralMode(NeutralMode.Coast);
         }
+
+        @Override
+        public double getDistance() 
+        {
+            // TODO Auto-generated method stub
+            return 0;
+        }
     }
 }

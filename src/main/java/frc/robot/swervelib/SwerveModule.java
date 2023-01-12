@@ -3,6 +3,7 @@ package frc.robot.swervelib;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import frc.robot.Constants.ModulePosition;
 
 public interface SwerveModule 
@@ -38,4 +39,6 @@ public interface SwerveModule
     double getAbsoluteOffset();
 
     void setStartingPosition();
+
+    SwerveModulePosition getFieldPosition();
 }

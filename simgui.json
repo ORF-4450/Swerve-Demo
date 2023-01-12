@@ -18,7 +18,7 @@
           "length": 0.4000000059604645,
           "width": 0.4000000059604645
         },
-        "image": "resources/2022-field.png",
+        "image": "C:\\Users\\rcorn\\workspace\\FRC Java\\Swerve-Demo\\resources\\2022-field.png",
         "window": {
           "visible": true
         }
@@ -31,6 +31,23 @@
         "open": true
       },
       "open": true
+    },
+    "transitory": {
+      "Shuffleboard": {
+        "Drivetrain": {
+          "Front Left Module": {
+            "open": true
+          },
+          "Front Right Module": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      }
     }
   }
 }

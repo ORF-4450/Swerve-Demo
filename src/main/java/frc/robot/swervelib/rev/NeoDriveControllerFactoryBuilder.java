@@ -104,8 +104,8 @@ public final class NeoDriveControllerFactoryBuilder
 
     private static class ControllerImplementation implements DriveController 
     {
-        private final CANSparkMax motor;
-        private final RelativeEncoder encoder;
+        private final CANSparkMax       motor;
+        private final RelativeEncoder   encoder;
 
         private ControllerImplementation(CANSparkMax motor, RelativeEncoder encoder) 
         {
@@ -122,6 +122,7 @@ public final class NeoDriveControllerFactoryBuilder
         }
 
         @Override
+        // TODO: rename this to getVelocity.
         public double getStateVelocity() 
         {
             return encoder.getVelocity();
@@ -160,6 +161,12 @@ public final class NeoDriveControllerFactoryBuilder
                 motor.setIdleMode(IdleMode.kBrake);
             else
                 motor.setIdleMode(IdleMode.kCoast);
+        }
+
+        @Override
+        public double getDistance() 
+        {
+            return encoder.getPosition();
         }
     }
 }

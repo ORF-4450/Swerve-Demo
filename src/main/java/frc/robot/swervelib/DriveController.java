@@ -10,6 +10,8 @@ public interface DriveController
 
     double getStateVelocity();
 
+    double getDistance();
+
     void stop();
     
     public RelativeEncoder getEncoder();

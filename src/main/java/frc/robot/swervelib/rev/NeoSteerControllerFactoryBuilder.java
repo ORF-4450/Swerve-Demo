@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import Team4450.Lib.Util;
 import frc.robot.swervelib.*;
+import frc.robot.swervelib.AbsoluteEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 

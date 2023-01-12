@@ -1,6 +1,6 @@
-### SDS Serve Drive code template
+### Serve Drive Demonstration/Test Program
 
-Modified for team 4450 test swerve drive base fall 2022.
+Modified from SDS Template fall 2022, updated to FRC 2023 libraries January 2023.
 
 ### Configuring the code for your robot
 

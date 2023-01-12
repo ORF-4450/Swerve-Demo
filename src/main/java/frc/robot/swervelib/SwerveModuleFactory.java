@@ -6,6 +6,7 @@ import Team4450.Lib.Util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -83,9 +84,9 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
             if (RobotBase.isSimulation()) 
             {
                 // Only Neo implemented.
-                //REVPhysicsSim.getInstance().addSparkMax(driveController.getMotorNeo(), DCMotor.getNEO(1));
+                REVPhysicsSim.getInstance().addSparkMax(driveController.getMotorNeo(), DCMotor.getNEO(1));
 
-                //driveController.getMotorNeo().getPIDController().setP(1, 3);
+                driveController.getMotorNeo().getPIDController().setP(1, 3);
             }
 
             resetSteerAngleToAbsolute();
@@ -232,6 +233,14 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         public void setStartingPosition() 
         {
             steerController.setStartingPosition(steerOffset);
+        }
+
+        @Override
+        public SwerveModulePosition getFieldPosition() 
+        {
+            return new SwerveModulePosition(driveController.getEncoder().getPosition(), 
+                                            new Rotation2d(getSteerAngle()));
+            //new Rotation2d(steerController.getMotorEncoder().getPosition()));
         }
     }
 } 
