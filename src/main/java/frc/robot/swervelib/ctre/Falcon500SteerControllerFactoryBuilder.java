@@ -282,7 +282,7 @@ public final class Falcon500SteerControllerFactoryBuilder
         @Override
         public void setPidConstants(double proportional, double integral, double derivative)
         {
-            // TODO Neo code here to remind what needs to be done here. controller is the motors
+            // TODO Neo code here to remind what needs to be done here. controller is the motor's
             // on board pid loop assuming that is how 500s are set up.
             // checkNeoError(controller.setP(proportional), "Failed to set NEO PID proportional constant");
             // checkNeoError(controller.setI(integral), "Failed to set NEO PID integral constant");
@@ -310,6 +310,20 @@ public final class Falcon500SteerControllerFactoryBuilder
                 motor.setNeutralMode(NeutralMode.Brake);
             else
                 motor.setNeutralMode(NeutralMode.Coast);
+        }
+
+        @Override
+        public boolean getBrakeMode() 
+        {
+            // TODO Figure out if we can get brake mode from TalonFX. Quick look
+            // did not discover a way. May have to track it in this class.
+            return false;
+        }
+
+        @Override
+        public void setStartingPosition(double steerOffset) 
+        {
+            // TODO Auto-generated method stub
         }
     }
 }

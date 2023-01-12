@@ -200,12 +200,11 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         {
             double angleRad = steerController.getAbsoluteEncoder().getAbsoluteAngle() - steerOffset;
             
-            Util.consoleLog("eaa=%.3f  off=%.3f  result=%.3f rad=%.3f",
+            Util.consoleLog("aa=%.3f  off=%.3f  result=%.3f rad=%.3f",
                 Math.toDegrees(steerController.getAbsoluteEncoder().getAbsoluteAngle()), 
                 Math.toDegrees(steerOffset), Math.toDegrees(angleRad), angleRad);
 
-            //steerController.getMotorEncoder().setPosition(angleRad);
-            steerController.setReferenceAngle(angleRad);
+            steerController.getMotorEncoder().setPosition(angleRad);
         }
 
         @Override
@@ -221,6 +220,18 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         public ModulePosition getModulePosition() 
         {
             return position;
+        }
+
+        @Override
+        public double getAbsoluteOffset() 
+        {
+            return steerOffset;
+        }
+
+        @Override
+        public void setStartingPosition() 
+        {
+            steerController.setStartingPosition(steerOffset);
         }
     }
 } 

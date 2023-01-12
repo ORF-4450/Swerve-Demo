@@ -85,7 +85,10 @@ public class Robot extends TimedRobot
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() 
+  {
+    Util.consoleLog();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -94,6 +97,8 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit() 
   {
+    Util.consoleLog();
+            
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -107,15 +112,14 @@ public class Robot extends TimedRobot
   @Override
   public void teleopInit() 
   {
+    Util.consoleLog();
+            
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
 
     if (m_autonomousCommand != null) m_autonomousCommand.cancel();
-
-    // Set swerve modules to forward direction.
-    //m_robotContainer.m_drivetrainSubsystem.drive(0, 0, 0, true);
   }
 
   /** This function is called periodically during operator control. */
@@ -125,6 +129,8 @@ public class Robot extends TimedRobot
   @Override
   public void testInit() 
   {
+    Util.consoleLog();
+            
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }

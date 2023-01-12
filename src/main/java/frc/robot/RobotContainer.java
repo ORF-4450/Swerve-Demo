@@ -69,12 +69,15 @@ public class RobotContainer
         .whenPressed(m_driveBase::zeroGyro);
 
     new Button(m_controller::getYButton)
-        .whenPressed(m_driveBase::resetModulesToForward);
+        .whenPressed(m_driveBase::setModulesToForward);
         //.whenPressed(new ResetToForwardCommand(m_driveBase));
 
     new Button(m_controller::getAButton)
-        .whenPressed(m_driveBase::resetModulesToAbsolute);
+        .whenPressed(m_driveBase::setModulesToAbsolute);
         //.whenPressed(new ResetToAbsoluteCommand(m_driveBase));
+
+    new Button(m_controller::getLeftBumper)
+        .whenPressed(m_driveBase::setModulesToStartPosition);
 
     new Button(m_controller::getBButton)
         .whenPressed(m_driveBase::resetModuleEncoders);

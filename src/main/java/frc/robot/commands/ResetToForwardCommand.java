@@ -26,7 +26,7 @@ public class ResetToForwardCommand extends CommandBase
     
         startTime = Util.timeStamp();
 
-        m_driveBase.resetModulesToForward();
+        m_driveBase.setModulesToForward();
     }
     
     @Override

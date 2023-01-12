@@ -8,17 +8,19 @@ public interface SteerController
 
     void setReferenceAngle(double referenceAngleRadians);
 
+    void setStartingPosition(double steerOffset);
+
     double getStateAngle();
 
     void stop();
 
     void setPidConstants(double proportional, double integral, double derivative);
 
-    public RelativeEncoder getMotorEncoder();
+    RelativeEncoder getMotorEncoder();
 
-    public AbsoluteEncoder getAbsoluteEncoder();
+    AbsoluteEncoder getAbsoluteEncoder();
 
-    //public double getAbsoluteOffset();
+    void setBrakeMode(boolean on);
 
-    public void setBrakeMode(boolean on);
+    boolean getBrakeMode();
 }

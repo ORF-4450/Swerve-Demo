@@ -30,7 +30,7 @@ public final class Mk4iSwerveModuleHelper
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .withRampRate(configuration.getSteerRampRate())
                 .build(new CanCoderFactoryBuilder()
-                        .withReadingUpdatePeriod(100)
+                        .withReadingUpdatePeriod(15)
                         .build());
     }
 
@@ -55,7 +55,7 @@ public final class Mk4iSwerveModuleHelper
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .withRampRate(configuration.getSteerRampRate())
                 .build(new CanCoderFactoryBuilder()
-                        .withReadingUpdatePeriod(100)
+                        .withReadingUpdatePeriod(15)
                         .build());
     }
 

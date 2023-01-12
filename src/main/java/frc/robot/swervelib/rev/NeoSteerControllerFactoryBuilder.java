@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import Team4450.Lib.Util;
 import frc.robot.swervelib.*;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
 import static frc.robot.swervelib.rev.RevUtils.checkNeoError;
@@ -262,6 +263,76 @@ public final class NeoSteerControllerFactoryBuilder
                 motor.setIdleMode(IdleMode.kBrake);
             else
                 motor.setIdleMode(IdleMode.kCoast);
+        }
+
+        @Override        
+        public boolean getBrakeMode() 
+        {
+            if (motor.getIdleMode() == IdleMode.kBrake)
+                return true;
+            else    
+                return false;
+        }
+
+        /**
+         * This method launches a thread that uses a PID control to turn the
+         * wheel to the "start" position, which represents wheel aligned straight
+         * ahead and wheel gear on the left side of the chassis. The start position
+         * is CanCoder absolute angle = 360 or 0.
+         */
+        @Override
+        public void setStartingPosition(double steerOffset) 
+        {
+            new Thread(() -> 
+            {
+                PIDController pid = new PIDController(.01, 0, 0);
+                
+                pid.setTolerance(0.5);
+                pid.enableContinuousInput(0, 360);
+
+                double  power, angle, startTime = Util.timeStamp();
+                String  result = "";
+
+                try {
+                    while (true)
+                    {
+                        angle = Math.toDegrees(absoluteEncoder.getAbsoluteAngle());
+
+                        power = pid.calculate(angle, 360);
+
+                        power = Util.clampValue(power, .20);
+
+                        motor.set(power);
+
+                        if (pid.atSetpoint())
+                        {
+                            motor.stopMotor();
+                            motorEncoder.setPosition(absoluteEncoder.getAbsoluteAngle());
+                            result = "on target";
+                            break;
+                        }
+
+                        if (Util.getElaspedTime(startTime) > 2.0) 
+                        {
+                            motor.stopMotor();
+                            result = "timeout";
+                            break;
+                        }
+
+                        Util.consoleLog("angle=%.3f  target=360  error=%.3f  pwr=%.3f",
+                            angle, 
+                            pid.getPositionError(), power);
+
+                        Thread.sleep(20);
+                    }
+                } catch (Exception e) { Util.logException(e); }
+
+                motor.stopMotor();
+
+                pid.close();
+
+                Util.consoleLog(result);
+            }).start();
         }
     }
 }

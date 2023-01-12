@@ -160,7 +160,7 @@ public class SwerveDriveBase extends SubsystemBase
     // modules. If you wish to adjust this configuration, create a Mk4MmoduleConfiguration object here and
     // call it's methods to set the parameters you wish to adjust and then pass that configuration object 
     // to each of the createNeo calls below, adding the configuration object just ahead of the GearRatio
-    // parameter. The Mk4ModuleConfiguration is currently customized for Neos.
+    // parameter. The default Mk4ModuleConfiguration is currently customized for Neos.
     
     m_frontLeftModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.FL,
@@ -228,7 +228,7 @@ public class SwerveDriveBase extends SubsystemBase
     m_backRightModule.setTranslation2d(new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
     
     resetModuleEncoders();
-    //resetModulesToAbsolute();
+    //setModulesToAbsolute();
 
     // Set starting position on field.
     setOdometry(new Pose2d(1.03, 2.825, new Rotation2d(0)));
@@ -337,7 +337,7 @@ public class SwerveDriveBase extends SubsystemBase
   {    
     if (overrideExecute)
     {
-        if (Util.getElaspedTime(overrideTime) > 1.0)
+        if (Util.getElaspedTime(overrideTime) > 2.0)
             overrideExecute = false;
         else
             return;
@@ -515,9 +515,9 @@ public class SwerveDriveBase extends SubsystemBase
       m_backRightModule.resetMotorEncoders(); 
   }
   
-  public void resetModulesToAbsolute() 
+  public void setModulesToAbsolute() 
   {
-      Util.consoleLog("resetModulesToAbsolute");
+      Util.consoleLog("setModulesToAbsolute");
 
       overrideExecute = true;
       overrideTime = Util.timeStamp();
@@ -528,10 +528,23 @@ public class SwerveDriveBase extends SubsystemBase
       m_backRightModule.resetSteerAngleToAbsolute();
   }
 
-  public void resetModulesToForward()
+  public void setModulesToForward()
   {
-      Util.consoleLog("reset to forward");
+      Util.consoleLog("setModulesToForward");
       
       drive(0, 0, 0, true);
+  }
+
+  public void setModulesToStartPosition()
+  {
+    Util.consoleLog("setModulesToStartPosition");
+
+    overrideExecute = true;
+    overrideTime = Util.timeStamp();
+
+    m_frontLeftModule.setStartingPosition();
+    m_frontRightModule.setStartingPosition();
+    m_backLeftModule.setStartingPosition();
+    m_backRightModule.setStartingPosition();
   }
 }

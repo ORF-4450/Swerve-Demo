@@ -34,4 +34,8 @@ public interface SwerveModule
     void resetMotorEncoders();
 
     ModulePosition getModulePosition();
+
+    double getAbsoluteOffset();
+
+    void setStartingPosition();
 }

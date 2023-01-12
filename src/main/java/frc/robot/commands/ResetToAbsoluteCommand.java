@@ -26,7 +26,7 @@ public class ResetToAbsoluteCommand extends CommandBase
     
         startTime = Util.timeStamp();
 
-        m_driveBase.resetModulesToAbsolute();
+        m_driveBase.setModulesToAbsolute();
     }
     
     @Override
