@@ -39,7 +39,7 @@ public class Robot extends TimedRobot
     // Set up our custom logger.
 
     try {
-      Util.CustomLogger.setup("Robot.");
+      Util.CustomLogger.setup("robot.");
     } catch (Exception e) { endCompetition(); }
 
     // Set Java to catch any uncaught exceptions and record them in our log file.

@@ -47,16 +47,18 @@ public class SwerveDriveCommand extends CommandBase
     @Override
     public void execute() 
     {
-        LCD.printLine(1, "x=%.3f  y=%.3f  throttle=%.3f  strafe=%.3f  rot=%.3f",
-            m_controller.getLeftX(),
-            m_controller.getLeftY(),
+        LCD.printLine(1, "rx=%.3f  ry=%.3f  throttle=%.3f  strafe=%.3f  rot=%.3f",
+            m_controller.getRightX(),
+            m_controller.getRightY(),
             m_throttleSupplier.getAsDouble(),
             m_strafeSupplier.getAsDouble(),
             m_rotationSupplier.getAsDouble()
         );
 
-        LCD.printLine(2, "gyro=%.3f  yaw=%.3f",
-            m_driveBase.getGyroRotation2d().getDegrees(),
+        LCD.printLine(2, "lx=%.3f  ly=%.3f  gyro=%.3f  yaw=%.3f",
+        m_controller.getLeftX(),
+        m_controller.getLeftY(),
+        m_driveBase.getGyroRotation2d().getDegrees(),
             m_driveBase.getGyroYaw()
         );
 
@@ -71,9 +73,9 @@ public class SwerveDriveCommand extends CommandBase
         // or smooth response to the joystick inputs. Will test both methods.
 
         // Squaring seemed to really slow throttle response.
-        // throttle = squareTheInput(throttle);
-        // strafe = squareTheInput(strafe);
-        // rotation = squareTheInput(rotation);
+        //throttle = squareTheInput(throttle);
+        //strafe = squareTheInput(strafe);
+        //rotation = squareTheInput(rotation);
 
         throttle = m_slewX.calculate(throttle);
         strafe = m_slewY.calculate(strafe);

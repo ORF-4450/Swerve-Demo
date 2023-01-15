@@ -50,7 +50,7 @@ public class SwerveDriveBase extends SubsystemBase
    * <p>
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */
-  public static final double MAX_VOLTAGE = 6.0; //12.0;
+  public static final double MAX_VOLTAGE = 4.0; //12.0;
 
   //  Measure the drivetrain's maximum velocity or calculate the theoretical.
   //  The formula for calculating the theoretical maximum velocity is:
@@ -341,6 +341,8 @@ public class SwerveDriveBase extends SubsystemBase
   @Override
   public void periodic() 
   {    
+    // Disables setting module speeds for a time so that the start position alignment
+    // function can control the motors without interference.
     if (overrideExecute)
     {
         if (Util.getElaspedTime(overrideTime) > 2.0)
@@ -361,22 +363,26 @@ public class SwerveDriveBase extends SubsystemBase
     if (!autoReturnToZero && states[0].speedMetersPerSecond < 0.01)
         m_frontLeftModule.stop();
     else
-        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, 
+                              states[0].angle.getRadians());
         
     if (!autoReturnToZero && states[1].speedMetersPerSecond < 0.01)
         m_frontRightModule.stop();
     else
-        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, 
+                               states[1].angle.getRadians());
   
     if (!autoReturnToZero && states[2].speedMetersPerSecond < 0.01)
         m_backLeftModule.stop();
     else
-        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, 
+                             states[2].angle.getRadians());
 
     if (!autoReturnToZero && states[3].speedMetersPerSecond < 0.01)
         m_backRightModule.stop();
     else
-        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+                              states[3].angle.getRadians());
 
     // Auto return to zero override is in effect for 1 second so motors can move independantly
     // of auto return setting.
