@@ -10,7 +10,7 @@ public interface SteerController
 
     void setStartingPosition(double steerOffset);
 
-    double getStateAngle();
+    double getAngle();
 
     void stop();
 

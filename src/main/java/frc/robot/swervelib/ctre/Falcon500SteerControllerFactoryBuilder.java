@@ -262,7 +262,7 @@ public final class Falcon500SteerControllerFactoryBuilder
         }
 
         @Override
-        public double getStateAngle() 
+        public double getAngle() 
         {
             double motorAngleRadians = motor.getSelectedSensorPosition() * motorEncoderPositionCoefficient;
 

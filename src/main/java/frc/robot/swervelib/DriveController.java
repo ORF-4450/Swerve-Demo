@@ -6,9 +6,9 @@ import com.revrobotics.RelativeEncoder;
 
 public interface DriveController 
 {
-    void setReferenceVoltage(double voltage);
+    void setReferenceVoltage(double voltage, double velocity);
 
-    double getStateVelocity();
+    double getVelocity();
 
     double getDistance();
 

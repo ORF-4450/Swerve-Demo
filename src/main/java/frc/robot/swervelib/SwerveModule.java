@@ -12,7 +12,7 @@ public interface SwerveModule
 
     double getSteerAngle();
 
-    void set(double driveVoltage, double steerAngle);
+    void set(double driveVoltage, double steerAngle, double velocity);
 
     void stop();
         

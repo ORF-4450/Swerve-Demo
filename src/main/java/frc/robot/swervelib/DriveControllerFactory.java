@@ -10,7 +10,7 @@ public interface DriveControllerFactory<Controller extends DriveController, Driv
     {
         Util.consoleLog();
     
-        container.addNumber("Current Velocity", controller::getStateVelocity);
+        container.addNumber("Current Velocity", controller::getVelocity);
         //TODO: remove these items when done testing.
         container.addNumber("Distance", controller::getDistance);
         container.addNumber("Voltage", controller::getVoltage);

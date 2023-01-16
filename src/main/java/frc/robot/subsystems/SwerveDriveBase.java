@@ -364,25 +364,25 @@ public class SwerveDriveBase extends SubsystemBase
         m_frontLeftModule.stop();
     else
         m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, 
-                              states[0].angle.getRadians());
+                              states[0].angle.getRadians(), states[0].speedMetersPerSecond);
         
     if (!autoReturnToZero && states[1].speedMetersPerSecond < 0.01)
         m_frontRightModule.stop();
     else
         m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, 
-                               states[1].angle.getRadians());
+                               states[1].angle.getRadians(), states[1].speedMetersPerSecond);
   
     if (!autoReturnToZero && states[2].speedMetersPerSecond < 0.01)
         m_backLeftModule.stop();
     else
         m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, 
-                             states[2].angle.getRadians());
+                             states[2].angle.getRadians(), states[2].speedMetersPerSecond);
 
     if (!autoReturnToZero && states[3].speedMetersPerSecond < 0.01)
         m_backRightModule.stop();
     else
         m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-                              states[3].angle.getRadians());
+                              states[3].angle.getRadians(), states[3].speedMetersPerSecond);
 
     // Auto return to zero override is in effect for 1 second so motors can move independantly
     // of auto return setting.
@@ -417,6 +417,7 @@ public class SwerveDriveBase extends SubsystemBase
 
     //m_odometry.update(getHeadingRotation2d(), states);
 
+    // Now update the pose of each wheel (module).
     updateModulePose(m_frontLeftModule);
     updateModulePose(m_frontRightModule);
     updateModulePose(m_backLeftModule);
@@ -575,5 +576,9 @@ public class SwerveDriveBase extends SubsystemBase
     m_frontRightModule.setStartingPosition();
     m_backLeftModule.setStartingPosition();
     m_backRightModule.setStartingPosition();
+
+    // TODO: see if this helps the code to see the new direction the
+    // robot is pointing as down the field.
+    m_navx.reset(); // or zeroGyro();
   }
 }

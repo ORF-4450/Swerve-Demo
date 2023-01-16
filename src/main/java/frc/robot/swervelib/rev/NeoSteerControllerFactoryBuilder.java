@@ -234,7 +234,7 @@ public final class NeoSteerControllerFactoryBuilder
         }
 
         @Override
-        public double getStateAngle() 
+        public double getAngle() 
         {
             double motorAngleRadians = motorEncoder.getPosition();
 

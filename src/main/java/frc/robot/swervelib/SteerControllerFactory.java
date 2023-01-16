@@ -12,7 +12,7 @@ public interface SteerControllerFactory<Controller extends SteerController, Stee
     {
         Util.consoleLog();
     
-        container.addNumber("Current Angle", () -> Math.toDegrees(controller.getStateAngle()));
+        container.addNumber("Current Angle", () -> Math.toDegrees(controller.getAngle()));
         container.addNumber("Target Angle", () -> Math.toDegrees(controller.getReferenceAngle()));
     }
 

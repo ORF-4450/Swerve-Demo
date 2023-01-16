@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import Team4450.Lib.Util;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.swervelib.DriveController;
 import frc.robot.swervelib.DriveControllerFactory;
 import frc.robot.swervelib.ModuleConfiguration;
@@ -105,6 +106,7 @@ public final class NeoDriveControllerFactoryBuilder
     {
         private final CANSparkMax       motor;
         private final RelativeEncoder   encoder;
+        private double                  currentVelocity;
 
         private ControllerImplementation(CANSparkMax motor, RelativeEncoder encoder) 
         {
@@ -115,15 +117,18 @@ public final class NeoDriveControllerFactoryBuilder
         }
 
         @Override
-        public void setReferenceVoltage(double voltage) 
+        public void setReferenceVoltage(double voltage, double velocity) 
         {
-            // TODO Test this on robot and if no problems, add to 500 controller.
             // If voltage is tiny, zero it out so no power to motor when
-            // we are not actually moving.
+            // we are not actually moving. This prevents constantly applying
+            // a voltage that is not enough to move the robot possibly damaging
+            // the motor.
             if (Math.abs(voltage) > .25)
                 motor.setVoltage(voltage);
             else
                 motor.setVoltage(0);
+
+            currentVelocity = velocity;
         }
 
         public double getVoltage()
@@ -132,10 +137,12 @@ public final class NeoDriveControllerFactoryBuilder
         }
 
         @Override
-        // TODO: rename this to getVelocity.
-        public double getStateVelocity() 
+        public double getVelocity() 
         {
-            return encoder.getVelocity();
+            if (RobotBase.isReal())
+                return encoder.getVelocity();
+            else
+                return currentVelocity;
         }
 
         @Override

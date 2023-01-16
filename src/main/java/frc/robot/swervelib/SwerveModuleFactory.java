@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import frc.robot.Robot;
 import frc.robot.Constants.ModulePosition;
 
 public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> 
@@ -37,7 +38,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         var driveController = driveControllerFactory.create(driveConfiguration, moduleConfiguration);
         var steerController = steerControllerFactory.create(steerConfiguration, moduleConfiguration);
 
-        return new ModuleImplementation(driveController, steerController, steerOffset, position);
+        return new ModuleImplementation(driveController, steerController, steerOffset, position, null);
     }
 
     public SwerveModule create(ShuffleboardLayout container, DriveConfiguration driveConfiguration, 
@@ -58,7 +59,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
                 moduleConfiguration
         );
 
-        return new ModuleImplementation(driveController, steerContainer, steerOffset, position);
+        return new ModuleImplementation(driveController, steerContainer, steerOffset, position,
+                                        container);
     }
 
     private static class ModuleImplementation implements SwerveModule 
@@ -70,9 +72,10 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         private double                actualAngleDegrees, steerOffset;
         private Pose2d                pose;
         private ModulePosition        position;
+        private ShuffleboardLayout    container;
 
         private ModuleImplementation(DriveController driveController, SteerController steerController,
-                                     double steerOffset, ModulePosition position) 
+                                     double steerOffset, ModulePosition position, ShuffleboardLayout container) 
         {
             Util.consoleLog();
     
@@ -80,10 +83,11 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
             this.steerController = steerController;
             this.steerOffset = steerOffset;
             this.position = position;
-
+            this.container = container;
+            
             if (RobotBase.isSimulation()) 
             {
-                // Only Neo implemented.
+                // Only Neo sim implemented.
                 REVPhysicsSim.getInstance().addSparkMax(driveController.getMotorNeo(), DCMotor.getNEO(1));
 
                 //driveController.getMotorNeo().getPIDController().setP(1, 3);
@@ -95,17 +99,17 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         @Override
         public double getDriveVelocity() 
         {
-            return driveController.getStateVelocity();
+            return driveController.getVelocity();
         }
 
         @Override
         public double getSteerAngle() 
         {
-            return steerController.getStateAngle(); // Radians.
+            return steerController.getAngle(); // Radians.
         }
 
         @Override
-        public void set(double driveVoltage, double steerAngle) 
+        public void set(double driveVoltage, double steerAngle, double velocity) 
         {
             steerAngle %= (2.0 * Math.PI);
 
@@ -138,7 +142,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
 
             if (steerAngle < 0.0) steerAngle += 2.0 * Math.PI;
 
-            driveController.setReferenceVoltage(driveVoltage);
+            driveController.setReferenceVoltage(driveVoltage, velocity);
             steerController.setReferenceAngle(steerAngle);
 
             actualAngleDegrees = Math.toDegrees(steerAngle);
@@ -238,8 +242,11 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         @Override
         public SwerveModulePosition getFieldPosition() 
         {
-            return new SwerveModulePosition(driveController.getEncoder().getPosition(), 
+            return new SwerveModulePosition(driveController.getDistance(), 
                                             new Rotation2d(getSteerAngle()));
+
+            //            return new SwerveModulePosition(driveController.getEncoder().getPosition(), 
+//                                            new Rotation2d(getSteerAngle()));
             //new Rotation2d(steerController.getMotorEncoder().getPosition()));
         }
     }

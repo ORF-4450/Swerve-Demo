@@ -115,13 +115,22 @@ public final class Falcon500DriveControllerFactoryBuilder
         }
 
         @Override
-        public void setReferenceVoltage(double voltage) 
+        public void setReferenceVoltage(double voltage, double velocity) 
         {
+            // If voltage is small, zero it out so no power to motor when
+            // we are not actually moving. This prevents constantly applying
+            // a voltage that is not enough to move the robot possibly damaging
+            // the motor.
+            if (Math.abs(voltage) > .25)
+                motor.setVoltage(voltage);
+            else
+                motor.setVoltage(0);
+                
             motor.set(TalonFXControlMode.PercentOutput, voltage / nominalVoltage);
         }
 
         @Override
-        public double getStateVelocity() 
+        public double getVelocity() 
         {
             return motor.getSelectedSensorVelocity() * sensorVelocityCoefficient;
         }
@@ -171,8 +180,7 @@ public final class Falcon500DriveControllerFactoryBuilder
         @Override
         public double getVoltage() 
         {
-            // TODO Auto-generated method stub
-            return 0;
+            return motor.getMotorOutputVoltage();
         }
     }
 }
