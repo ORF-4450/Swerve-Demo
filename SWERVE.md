@@ -1,8 +1,4 @@
-### Serve Drive Demonstration/Test Program
-
-Modified from SDS Template fall 2022, updated to FRC 2023 libraries January 2023.
-
-### Configuring the code for your robot
+### Configuring the Swerve code for your robot
 
 1. Set your team number.
 2. Read through and configure `frc.robot.Constants`. Parts of the code that need to be configured for your specific
