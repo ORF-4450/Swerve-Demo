@@ -128,6 +128,9 @@ public final class NeoDriveControllerFactoryBuilder
             else
                 motor.setVoltage(0);
 
+            // We track the "requested" velocity to use as a substitute for measured
+            // velocity due to problems with Neo simulation not calculating a correct
+            // velocicty. TODO Fix Rev simulation to work correctly.
             currentVelocity = velocity;
         }
 

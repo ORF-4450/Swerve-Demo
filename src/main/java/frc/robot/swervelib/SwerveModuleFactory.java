@@ -77,7 +77,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         private ModuleImplementation(DriveController driveController, SteerController steerController,
                                      double steerOffset, ModulePosition position, ShuffleboardLayout container) 
         {
-            Util.consoleLog();
+            Util.consoleLog("%s", position);
     
             this.driveController = driveController;
             this.steerController = steerController;
@@ -205,7 +205,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         {
             double angleRad = steerController.getAbsoluteEncoder().getAbsoluteAngle() - steerOffset;
             
-            Util.consoleLog("aa=%.3f  off=%.3f  result=%.3f rad=%.3f",
+            Util.consoleLog("%s aa=%.3f  off=%.3f  result=%.3f rad=%.3f", position,
                 Math.toDegrees(steerController.getAbsoluteEncoder().getAbsoluteAngle()), 
                 Math.toDegrees(steerOffset), Math.toDegrees(angleRad), angleRad);
 
@@ -215,7 +215,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
         @Override
         public void resetMotorEncoders() 
         {
-            Util.consoleLog();
+            Util.consoleLog("%s", position);
     
             driveController.getEncoder().setPosition(0);
             steerController.getMotorEncoder().setPosition(0);

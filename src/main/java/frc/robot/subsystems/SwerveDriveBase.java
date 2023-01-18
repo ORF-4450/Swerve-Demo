@@ -246,8 +246,8 @@ public class SwerveDriveBase extends SubsystemBase
   }
 
   /**
-   * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
-   * 'forwards' direction.
+   * Sets the gyroscope angle to zero. This can be used to set the direction 
+   * the robot is currently facing to the 'forwards' direction.
    */
   public void zeroGyro() 
   {
@@ -256,6 +256,10 @@ public class SwerveDriveBase extends SubsystemBase
     m_navx.zeroYaw();
   }
 
+  /**
+   * Get gyro yaw from the angle of the robot at last gyro reset.
+   * @return Gyro yaw in radians. + is left of zero (ccw) - is right (cw).
+   */
   public Rotation2d getGyroRotation2d() 
   {
     if (m_navx.isMagnetometerCalibrated()) 
@@ -269,27 +273,42 @@ public class SwerveDriveBase extends SubsystemBase
     return Rotation2d.fromDegrees(-m_navx.getYaw());
   }
 
+  /**
+   * Get gyro yaw from the angle of the robot at last gyro reset.
+   * @return Gyro yaw. + is left of zero (ccw) - is right (cw).
+   */
   public double getGyroYaw()
   {
     return -m_navx.getYaw();
   }
 
+  /**
+   * Get heading in degrees.
+   * @return Heading in degrees. 0 to +- 180.
+   */
   public double getHeadingDegrees() 
   {
     return Math.IEEEremainder((-m_navx.getAngle()), 360);
   }
 
+  /**
+   * Get heading in radians.
+   * @return Heading in radians.
+   */
   public Rotation2d getHeadingRotation2d() 
   {
     return Rotation2d.fromDegrees(getHeadingDegrees());
   }
 
   /**
-   * Generate a chassis speeds object that the periodic funtion executes from the
-   * directional inputs. Speeds in m/s.
-   * @param throttle Throttle speed.
-   * @param strafe Strafe speed.
-   * @param rotation Rotation speed.
+   * With the directional speeds, generates a Chassis Speeds object which
+   * is used to command the swerve modules to move. This is how we drive
+   * the robot. The motion specified continues until drive is called again.
+   * This method is typicalled by the driving command passing inputs (typically
+   * joystick inputs) on a regular basis. Speeds in m/s and radians/s.
+   * @param throttle Throttle speed. + is forward.
+   * @param strafe Strafe speed. + is left.
+   * @param rotation Rotation speed. + is left.
    */
   public void drive(double throttle, double strafe, double rotation)
   {
@@ -339,6 +358,10 @@ public class SwerveDriveBase extends SubsystemBase
                               states[3].angle.getRadians(), states[3].speedMetersPerSecond);
   }
 
+  /**
+   * Called on every scheduler loop. Updates odometry tracking of
+   * robot movement.
+   */
   @Override
   public void periodic() 
   {    
@@ -350,8 +373,8 @@ public class SwerveDriveBase extends SubsystemBase
   }
 
   /**
-   * Update robot pose (position & rotation) on the field. Used to drive
-   * the field2d object.
+   * Update robot pose (position & rotation) on the field in the odometry tracking
+   * object. Used to drive the field2d object.
    */
   public void updateOdometry()
   {
@@ -372,8 +395,7 @@ public class SwerveDriveBase extends SubsystemBase
   /**
    * Update the pose of a swerve module on the field2d object. Module
    * pose is connected to the robot pose so they move together on the
-   * field sim but this code will rotate the module icon to direction wheel
-   * is pointing.
+   * field simulation display.
    * @param module Swerve module to update.
    */
   private void updateModulePose(SwerveModule module)
@@ -387,6 +409,10 @@ public class SwerveDriveBase extends SubsystemBase
         new Pose2d(modulePosition, module.getHeadingRotation2d().plus(getHeadingRotation2d())));
   }
 
+  /**
+   * Rotates the module icons on the field display so indicate where
+   * the wheel is pointing.
+   */
   private void setField2dModulePoses()
   {
     Pose2d      modulePoses[] = new Pose2d[4];
@@ -399,16 +425,29 @@ public class SwerveDriveBase extends SubsystemBase
     field2d.getObject("Swerve Modules").setPoses(modulePoses);
   }
 
+  /**
+   * Returns the estimated position of the robot on the field
+   * as determined by the odometry tracking object.
+   * @return Position on the field and direction robot is pointing.
+   */
   public Pose2d getPoseMeters() 
   {
     return m_odometry.getEstimatedPosition();
   }
 
+  /**
+   * Returns the odometry tracking object.
+   * @return The odometry tracking object.
+   */
   public SwerveDrivePoseEstimator getOdometry() 
   {
     return m_odometry;
   }
 
+  /**
+   * Set the odometry tracking to a new position.
+   * @param pose The new position (x,y,angle).
+   */
   public void setOdometry(Pose2d pose) 
   {
     // TODO: Fix this
@@ -424,6 +463,9 @@ public class SwerveDriveBase extends SubsystemBase
     m_navx.reset();
   }  
 
+  /**
+   * Called on every scheduler loop when in simulation.
+   */
   @Override
   public void simulationPeriodic() 
   {
@@ -446,6 +488,11 @@ public class SwerveDriveBase extends SubsystemBase
     Unmanaged.feedEnable(20);
   }
 
+  /**
+   * Toggle the auto return to zero flag. Auto return to zero 
+   * automatically retuns the wheels to straight ahead when 
+   * joystick returns to neutral position.
+   */
   public void toggleAutoReturnToZero()
   {
     Util.consoleLog();
@@ -455,11 +502,20 @@ public class SwerveDriveBase extends SubsystemBase
      updateDS();
   }
 
+  /**
+   * Return state of the wheel auto return to zero (or straight ahead)
+   * flag. Auto return to zero sets the wheels back to straight ahead
+   * when joysticks return to neutral position.
+   * @return True if auto return to zero.
+   */
   public boolean getAutoReturnToZero()
   {
      return autoReturnToZero;
   }
 
+  /**
+   * Toggle the drive mode between field or robot oriented.
+   */
   public void toggleFieldOriented()
   {
       Util.consoleLog();
@@ -469,17 +525,24 @@ public class SwerveDriveBase extends SubsystemBase
       updateDS();
   }
 
+  /**
+   * Return the drive mode status.
+   * @return True if field oriented, false if robot oriented.
+   */
   public boolean getFieldOriented()
   {
       return fieldOriented;
   }
 
-  public void updateDS()
+  private void updateDS()
   {
       SmartDashboard.putBoolean("Field Oriented", fieldOriented);
       SmartDashboard.putBoolean("Auto Return To Zero", autoReturnToZero);
   }
 
+  /**
+   * Set modules driving and steering encoders to zero.
+   */
   public void resetModuleEncoders() 
   {
       Util.consoleLog();
@@ -492,7 +555,7 @@ public class SwerveDriveBase extends SubsystemBase
   
   public void setModulesToAbsolute() 
   {
-      Util.consoleLog("setModulesToAbsolute");
+      Util.consoleLog();
 
       m_frontLeftModule.resetSteerAngleToAbsolute();
       m_frontRightModule.resetSteerAngleToAbsolute();
@@ -500,6 +563,10 @@ public class SwerveDriveBase extends SubsystemBase
       m_backRightModule.resetSteerAngleToAbsolute();
   }
 
+  /**
+   * Set modules to point "forward". This is same as joystick
+   * to neutral position
+   */
   public void setModulesToForward()
   {
       Util.consoleLog();
@@ -513,6 +580,13 @@ public class SwerveDriveBase extends SubsystemBase
       autoReturnToZero = saveARZ;
   }
 
+  /**
+   * Set modules to point in the "start" position. This is straight
+   * forward, bevel gear on left side. This the wheel position the
+   * code expects at start up. You can call this after driving and
+   * usually it works to reorient the robot but not always. This
+   * is mainly to get the wheels aligned for start of match.
+   */
   public void setModulesToStartPosition()
   {
     Util.consoleLog();
