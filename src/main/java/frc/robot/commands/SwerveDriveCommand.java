@@ -89,7 +89,7 @@ public class SwerveDriveCommand extends CommandBase
     {
         Util.consoleLog("interrupted=%b", interrupted);
 
-        m_driveBase.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
+        m_driveBase.drive(0.0, 0.0, 0.0);
     }
  
     private static double deadband(double value, double deadband) 

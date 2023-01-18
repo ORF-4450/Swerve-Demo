@@ -14,14 +14,14 @@ package frc.robot;
  */
 public final class Constants 
 {
-    public static final String	PROGRAM_NAME = "SDT-01.16.23-1";
+    public static final String	PROGRAM_NAME = "SDT-01.17.23-1";
     
     public static Robot			    robot;
 
     public static final double  THROTTLE_DEADBAND = .05;
     public static final double  ROTATION_DEADBAND = .05;
     public static final double  THROTTLE_SLEW = 1.5;        // rate of change % input/second.
-    public static final double  ROTATION_SLEW = 3.0;
+    public static final double  ROTATION_SLEW = 1.5;  //3.0;
 
     /**
      * The left-to-right distance between the drivetrain wheels

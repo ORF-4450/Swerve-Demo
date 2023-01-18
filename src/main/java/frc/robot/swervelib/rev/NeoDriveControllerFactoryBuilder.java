@@ -139,10 +139,10 @@ public final class NeoDriveControllerFactoryBuilder
         @Override
         public double getVelocity() 
         {
-            if (RobotBase.isReal())
+            //if (RobotBase.isReal())
                 return encoder.getVelocity();
-            else
-                return currentVelocity;
+            //else
+            //    return currentVelocity;
         }
 
         @Override

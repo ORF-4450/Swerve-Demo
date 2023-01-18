@@ -4,13 +4,13 @@ import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveBase;
 
-public class ResetToForwardCommand extends CommandBase
+public class SetToStartPositionCommand extends CommandBase
 {
     private final SwerveDriveBase   m_driveBase;
 
     private double                  startTime;
 
-    public ResetToForwardCommand(SwerveDriveBase driveBase) 
+    public SetToStartPositionCommand(SwerveDriveBase driveBase) 
     {
         Util.consoleLog();
 
@@ -22,17 +22,17 @@ public class ResetToForwardCommand extends CommandBase
     @Override
     public void initialize() 
     {
-        Util.consoleLog("ResetToForwardCommand-init");
+        Util.consoleLog();
     
         startTime = Util.timeStamp();
 
-        m_driveBase.setModulesToForward();
+        m_driveBase.setModulesToStartPosition();;
     }
     
     @Override
     public boolean isFinished() 
     {
-        if (Util.getElaspedTime(startTime) > 1.0) return true;
+        if (Util.getElaspedTime(startTime) > 2.0) return true;
 
         return false;
     }
@@ -40,6 +40,6 @@ public class ResetToForwardCommand extends CommandBase
     @Override
     public void end(boolean interrupted) 
     {
-        Util.consoleLog("ResetToForwardCommand-end: interrupted=%b", interrupted);
+        Util.consoleLog("interrupted=%b", interrupted);
     }
 }

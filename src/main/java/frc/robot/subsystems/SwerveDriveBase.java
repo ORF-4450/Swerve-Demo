@@ -238,6 +238,9 @@ public class SwerveDriveBase extends SubsystemBase
 
     // Set starting position on field.
     setOdometry(new Pose2d(1.03, 2.825, new Rotation2d(0)));
+
+    // Initialze drive by issuing a no movement drive command.
+    drive(0, 0, 0);
     
     updateDS();
   }
@@ -282,38 +285,6 @@ public class SwerveDriveBase extends SubsystemBase
   }
 
   /**
-   * Set the chassis speeds object that the periodic function executes.
-   * @param chassisSpeeds ChassisSpeeds object to execute.
-   */
-  public void drive(ChassisSpeeds chassisSpeeds) 
-  {
-    m_chassisSpeeds = chassisSpeeds;
-  }
-
-  /**
-   * Generate a chassis speeds object that the periodic funtion executes from the
-   * directional inputs. Speeds in m/s. Optionally turns on the auto return to zero
-   * position function for one periodic call. Used to align wheels to zero even when 
-   * auto return to zero is off.
-   * @param throttle Throttle speed.
-   * @param strafe Strafe speed.
-   * @param rotation Rotation speed.
-   * @param override True to override auto return to zero function.
-   */
-  public void drive(double throttle, double strafe, double rotation, boolean override)
-  {
-      overrideAutoReturnToZero = override;
-
-      if (overrideAutoReturnToZero) 
-      {
-        autoReturnToZero = true;
-        overrideTime = Util.timeStamp();
-      }
-
-      drive(throttle, strafe, rotation);
-  }
-
-  /**
    * Generate a chassis speeds object that the periodic funtion executes from the
    * directional inputs. Speeds in m/s.
    * @param throttle Throttle speed.
@@ -333,23 +304,6 @@ public class SwerveDriveBase extends SubsystemBase
     m_chassisSpeeds = fieldOriented
         ? ChassisSpeeds.fromFieldRelativeSpeeds(throttle, strafe, rotation, getHeadingRotation2d())
         : new ChassisSpeeds(throttle, strafe, rotation);
-  }
-
-  /**
-   * Drives the robot with the currently set chassis speeds object on each scheduler pass.
-   */
-  @Override
-  public void periodic() 
-  {    
-    // Disables setting module speeds for a time so that the start position alignment
-    // function can control the motors without interference.
-    if (overrideExecute)
-    {
-        if (Util.getElaspedTime(overrideTime) > 2.0)
-            overrideExecute = false;
-        else
-            return;
-    }
 
     LCD.printLine(3, "max vel=%.3fms  max ang vel=%.3frs  voltage=%.1f",
         MAX_VELOCITY_METERS_PER_SECOND,
@@ -383,17 +337,12 @@ public class SwerveDriveBase extends SubsystemBase
     else
         m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
                               states[3].angle.getRadians(), states[3].speedMetersPerSecond);
+  }
 
-    // Auto return to zero override is in effect for 1 second so motors can move independantly
-    // of auto return setting.
-
-    if (overrideAutoReturnToZero && Util.getElaspedTime(overrideTime) > 1.0)
-    {
-        autoReturnToZero = false;
-        overrideAutoReturnToZero = false;
-    }
-
-    updateOdometry(states);
+  @Override
+  public void periodic() 
+  {    
+    updateOdometry();
 
     field2d.setRobotPose(getPoseMeters());
 
@@ -403,19 +352,15 @@ public class SwerveDriveBase extends SubsystemBase
   /**
    * Update robot pose (position & rotation) on the field. Used to drive
    * the field2d object.
-   * @param states Array of module state objects.
    */
-  public void updateOdometry(SwerveModuleState[] states)
+  public void updateOdometry()
   {
-    // TODO: Fix this.
     modulePositions[0] = m_frontLeftModule.getFieldPosition();
     modulePositions[1] = m_frontRightModule.getFieldPosition();
     modulePositions[2] = m_backLeftModule.getFieldPosition();
     modulePositions[3] = m_backRightModule.getFieldPosition();
     
     m_odometry.update(getHeadingRotation2d(), modulePositions);
-
-    //m_odometry.update(getHeadingRotation2d(), states);
 
     // Now update the pose of each wheel (module).
     updateModulePose(m_frontLeftModule);
@@ -549,9 +494,6 @@ public class SwerveDriveBase extends SubsystemBase
   {
       Util.consoleLog("setModulesToAbsolute");
 
-      overrideExecute = true;
-      overrideTime = Util.timeStamp();
-
       m_frontLeftModule.resetSteerAngleToAbsolute();
       m_frontRightModule.resetSteerAngleToAbsolute();
       m_backLeftModule.resetSteerAngleToAbsolute();
@@ -560,25 +502,26 @@ public class SwerveDriveBase extends SubsystemBase
 
   public void setModulesToForward()
   {
-      Util.consoleLog("setModulesToForward");
+      Util.consoleLog();
+
+      boolean saveARZ = autoReturnToZero;
+
+      autoReturnToZero = true;
       
-      drive(0, 0, 0, true);
+      drive(0, 0, 0);
+
+      autoReturnToZero = saveARZ;
   }
 
   public void setModulesToStartPosition()
   {
-    Util.consoleLog("setModulesToStartPosition");
-
-    overrideExecute = true;
-    overrideTime = Util.timeStamp();
+    Util.consoleLog();
 
     m_frontLeftModule.setStartingPosition();
     m_frontRightModule.setStartingPosition();
     m_backLeftModule.setStartingPosition();
     m_backRightModule.setStartingPosition();
 
-    // TODO: see if this helps the code to see the new direction the
-    // robot is pointing as down the field.
     m_navx.reset(); // or zeroGyro();
   }
 }

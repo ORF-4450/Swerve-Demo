@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ResetToAbsoluteCommand;
-import frc.robot.commands.ResetToForwardCommand;
+import frc.robot.commands.SetToStartPositionCommand;
+import frc.robot.commands.SetToForwardCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveDriveBase;
 
@@ -73,7 +73,8 @@ public class RobotContainer
     //    .whenPressed(m_driveBase::zeroGyro);
         
     new Trigger(() -> m_controller.getYButton())
-        .onTrue(new InstantCommand(m_driveBase::setModulesToForward));
+        //.onTrue(new InstantCommand(m_driveBase::setModulesToForward));
+        .onTrue(new SetToForwardCommand(m_driveBase));
 
     //new Button(m_controller::getYButton)
     //    .whenPressed(m_driveBase::setModulesToForward);
@@ -87,7 +88,8 @@ public class RobotContainer
         //.whenPressed(new ResetToAbsoluteCommand(m_driveBase));
         
     new Trigger(() -> m_controller.getLeftBumper())
-        .onTrue(new InstantCommand(m_driveBase::setModulesToStartPosition));
+        //.onTrue(new InstantCommand(m_driveBase::setModulesToStartPosition));
+        .onTrue(new SetToStartPositionCommand(m_driveBase));
 
     //new Button(m_controller::getLeftBumper)
     //    .whenPressed(m_driveBase::setModulesToStartPosition);

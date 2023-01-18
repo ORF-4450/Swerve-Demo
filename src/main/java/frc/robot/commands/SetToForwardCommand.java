@@ -4,13 +4,13 @@ import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveBase;
 
-public class ResetToAbsoluteCommand extends CommandBase
+public class SetToForwardCommand extends CommandBase
 {
     private final SwerveDriveBase   m_driveBase;
 
     private double                  startTime;
 
-    public ResetToAbsoluteCommand(SwerveDriveBase driveBase) 
+    public SetToForwardCommand(SwerveDriveBase driveBase) 
     {
         Util.consoleLog();
 
@@ -22,11 +22,11 @@ public class ResetToAbsoluteCommand extends CommandBase
     @Override
     public void initialize() 
     {
-        Util.consoleLog("ResetToAbsoluteCommand-init");
+        Util.consoleLog();
     
         startTime = Util.timeStamp();
 
-        m_driveBase.setModulesToAbsolute();
+        m_driveBase.setModulesToForward();
     }
     
     @Override
@@ -40,6 +40,6 @@ public class ResetToAbsoluteCommand extends CommandBase
     @Override
     public void end(boolean interrupted) 
     {
-        Util.consoleLog("ResetToAbsoluteCommand-end: interrupted=%b", interrupted);
+        Util.consoleLog("interrupted=%b", interrupted);
     }
 }
