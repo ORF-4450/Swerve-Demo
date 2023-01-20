@@ -11,7 +11,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import frc.robot.Robot;
-import frc.robot.Constants.ModulePosition;
+import frc.robot.swervelib.ModuleConfiguration.ModulePosition;
 
 public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> 
 {

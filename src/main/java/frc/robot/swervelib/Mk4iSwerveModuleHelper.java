@@ -1,6 +1,6 @@
 package frc.robot.swervelib;
 
-import frc.robot.Constants.ModulePosition;
+import frc.robot.swervelib.ModuleConfiguration.ModulePosition;
 import frc.robot.swervelib.ctre.*;
 import frc.robot.swervelib.rev.NeoDriveControllerFactoryBuilder;
 import frc.robot.swervelib.rev.NeoSteerConfiguration;

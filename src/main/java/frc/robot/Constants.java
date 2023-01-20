@@ -41,14 +41,6 @@ public final class Constants
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = .475; // Measure and set wheelbase
 
-    public enum ModulePosition 
-    {
-      FL,
-      FR,
-      BL,
-      BR
-    }
-
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // Set front left module drive motor ID
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2; //  Set front left module steer motor ID
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 3; //  Set front left steer encoder ID

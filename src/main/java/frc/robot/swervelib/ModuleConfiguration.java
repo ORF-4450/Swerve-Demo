@@ -18,6 +18,14 @@ public class ModuleConfiguration
     private final double steerReduction;
     private final boolean steerInverted;
 
+    public enum ModulePosition 
+    {
+      FL,
+      FR,
+      BL,
+      BR
+    }
+    
     /**
      * Creates a new module configuration.
      *
