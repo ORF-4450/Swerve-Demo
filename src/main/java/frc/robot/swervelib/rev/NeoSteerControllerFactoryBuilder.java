@@ -7,6 +7,8 @@ import Team4450.Lib.Util;
 import frc.robot.swervelib.*;
 import frc.robot.swervelib.AbsoluteEncoder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
 import static frc.robot.swervelib.rev.RevUtils.checkNeoError;
@@ -96,6 +98,8 @@ public final class NeoSteerControllerFactoryBuilder
     
             container.addNumber("Absolute Encoder Angle", 
                     () -> Math.toDegrees(controller.absoluteEncoder.getAbsoluteAngle()));
+            
+            container.addNumber("Steer Encoder position", () -> controller.getMotorEncoder().getPosition()); 
 
             SteerControllerFactory.super.addDashboardEntries(container, controller);
         }
@@ -129,8 +133,8 @@ public final class NeoSteerControllerFactoryBuilder
             
             RelativeEncoder integratedEncoder = motor.getEncoder();
 
-            checkNeoError(integratedEncoder.setPositionConversionFactor(2.0 * Math.PI * moduleConfiguration.getSteerReduction()), "Failed to set NEO encoder conversion factor");
-            checkNeoError(integratedEncoder.setVelocityConversionFactor(2.0 * Math.PI * moduleConfiguration.getSteerReduction() / 60.0), "Failed to set NEO encoder conversion factor");
+            checkNeoError(integratedEncoder.setPositionConversionFactor(2.0 * Math.PI * moduleConfiguration.getSteerReduction()), "");
+            checkNeoError(integratedEncoder.setVelocityConversionFactor(2.0 * Math.PI * moduleConfiguration.getSteerReduction() / 60.0), "Failed to set steer NEO encoder vel conversion factor");
             checkNeoError(integratedEncoder.setPosition(absoluteEncoder.getAbsoluteAngle()), "Failed to set NEO encoder position");
 
             SparkMaxPIDController controller = motor.getPIDController();
@@ -170,6 +174,19 @@ public final class NeoSteerControllerFactoryBuilder
             this.controller = motor.getPIDController();
             this.motorEncoder = motor.getEncoder();
             this.absoluteEncoder = absoluteEncoder;
+                                    
+            if (RobotBase.isSimulation()) 
+            {
+                // Note that the REV simulation does not work correctly. We have hacked
+                // a solution where we drive the sim through our code, not by reading the
+                // REV simulated encoder position and velocity, which are incorrect. However, 
+                // registering the motor controller with the REV sim is still needed.
+
+                // Add Neo to sim.
+                REVPhysicsSim.getInstance().addSparkMax(motor, DCMotor.getNEO(1));
+
+                //controller.setP(1, 3);
+            }
         }
 
         @Override
@@ -236,13 +253,18 @@ public final class NeoSteerControllerFactoryBuilder
         @Override
         public double getAngle() 
         {
-            double motorAngleRadians = motorEncoder.getPosition();
+            if (RobotBase.isReal())
+            {
+                double motorAngleRadians = motorEncoder.getPosition();
 
-            motorAngleRadians %= 2.0 * Math.PI;
+                motorAngleRadians %= 2.0 * Math.PI;
 
-            if (motorAngleRadians < 0.0) motorAngleRadians += 2.0 * Math.PI;
+                if (motorAngleRadians < 0.0) motorAngleRadians += 2.0 * Math.PI;
 
-            return motorAngleRadians;
+                return motorAngleRadians;
+            }
+            else
+                return getReferenceAngle();
         }
 
         @Override
@@ -278,7 +300,7 @@ public final class NeoSteerControllerFactoryBuilder
         /**
          * This method launches a thread that uses a PID control to turn the
          * wheel to the "start" position, which represents wheel aligned straight
-         * ahead and wheel gear on the left side of the chassis. The start position
+         * ahead and wheel gear facing the left side of the chassis. The start position
          * is CanCoder absolute angle = 360 or 0.
          */
         @Override
@@ -320,9 +342,9 @@ public final class NeoSteerControllerFactoryBuilder
                             break;
                         }
 
-                        Util.consoleLog("angle=%.3f  target=360  error=%.3f  pwr=%.3f",
-                            angle, 
-                            pid.getPositionError(), power);
+                        // Util.consoleLog("angle=%.3f  target=360  error=%.3f  pwr=%.3f",
+                        //     angle, 
+                        //     pid.getPositionError(), power);
 
                         Thread.sleep(20);
                     }

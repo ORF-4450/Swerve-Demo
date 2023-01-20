@@ -88,7 +88,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
             if (RobotBase.isSimulation()) 
             {
                 // Only Neo sim implemented.
-                REVPhysicsSim.getInstance().addSparkMax(driveController.getMotorNeo(), DCMotor.getNEO(1));
+                //REVPhysicsSim.getInstance().addSparkMax(driveController.getMotorNeo(), DCMotor.getNEO(1));
 
                 //driveController.getMotorNeo().getPIDController().setP(1, 3);
             }
@@ -245,8 +245,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration>
             return new SwerveModulePosition(driveController.getDistance(), 
                                             new Rotation2d(getSteerAngle()));
 
-            //            return new SwerveModulePosition(driveController.getEncoder().getPosition(), 
-//                                            new Rotation2d(getSteerAngle()));
+            // TODO            return new SwerveModulePosition(driveController.getEncoder().getPosition(), 
+            //                                            new Rotation2d(getSteerAngle()));
             //new Rotation2d(steerController.getMotorEncoder().getPosition()));
         }
     }

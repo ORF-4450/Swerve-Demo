@@ -64,55 +64,30 @@ public class RobotContainer
    */
   private void configureButtonBindings() 
   {
-        
+    // Driver pad buttons.
+
     new Trigger(() -> m_controller.getXButton())
         .onTrue(new InstantCommand(m_driveBase::zeroGyro));
-        
-    //new Button(m_controller::getXButton)
-        // No requirements because we don't need to interrupt anything
-    //    .whenPressed(m_driveBase::zeroGyro);
-        
+                
     new Trigger(() -> m_controller.getYButton())
-        //.onTrue(new InstantCommand(m_driveBase::setModulesToForward));
         .onTrue(new SetToForwardCommand(m_driveBase));
-
-    //new Button(m_controller::getYButton)
-    //    .whenPressed(m_driveBase::setModulesToForward);
-        //.whenPressed(new ResetToForwardCommand(m_driveBase));
         
     new Trigger(() -> m_controller.getAButton())
         .onTrue(new InstantCommand(m_driveBase::setModulesToAbsolute));
-
-    //new Button(m_controller::getAButton)
-    //    .whenPressed(m_driveBase::setModulesToAbsolute);
-        //.whenPressed(new ResetToAbsoluteCommand(m_driveBase));
         
-    new Trigger(() -> m_controller.getLeftBumper())
-        //.onTrue(new InstantCommand(m_driveBase::setModulesToStartPosition));
+    new Trigger(() -> m_controller.getStartButton())
         .onTrue(new SetToStartPositionCommand(m_driveBase));
-
-    //new Button(m_controller::getLeftBumper)
-    //    .whenPressed(m_driveBase::setModulesToStartPosition);
         
-    new Trigger(() -> m_controller.getBButton())
+    new Trigger(() -> m_controller.getRightBumper())
         .onTrue(new InstantCommand(m_driveBase::resetModuleEncoders));
 
-    //new Button(m_controller::getBButton)
-    //    .whenPressed(m_driveBase::resetModuleEncoders);
-
     // Start button toggles autoRreturnToZero mode.
-    new Trigger(() -> m_controller.getStartButton())
+    new Trigger(() -> m_controller.getLeftBumper())
         .onTrue(new InstantCommand(m_driveBase::toggleAutoReturnToZero));
-    
-    //new Button(m_controller::getStartButton)
-    //    .whenPressed(m_driveBase::toggleAutoReturnToZero);
 
-    // Back button toggles field oriented driving mode.
+    // Back button toggles field/robot oriented driving mode.
     new Trigger(() -> m_controller.getBackButton())
         .onTrue(new InstantCommand(m_driveBase::toggleFieldOriented));
-
-    //new Button(m_controller::getBackButton)
-    //    .whenPressed(m_driveBase::toggleFieldOriented);
   }
 
   /**
@@ -122,7 +97,7 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
-    // An ExampleCommand will run in autonomous
+    // An ExampleCommand that will run in autonomous
     return new InstantCommand();
   }
 }

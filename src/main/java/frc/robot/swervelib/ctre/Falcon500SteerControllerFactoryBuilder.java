@@ -299,8 +299,7 @@ public final class Falcon500SteerControllerFactoryBuilder
         @Override
         public AbsoluteEncoder getAbsoluteEncoder() 
         {
-            // TODO Auto-generated method stub
-            return null;
+            return absoluteEncoder;
         }
         
         @Override

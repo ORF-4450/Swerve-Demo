@@ -3,11 +3,14 @@ package frc.robot.swervelib.rev;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import Team4450.Lib.Util;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.Robot;
 import frc.robot.swervelib.DriveController;
 import frc.robot.swervelib.DriveControllerFactory;
 import frc.robot.swervelib.ModuleConfiguration;
@@ -94,9 +97,11 @@ public final class NeoDriveControllerFactoryBuilder
 
             // Setup encoder
             RelativeEncoder encoder = motor.getEncoder();
+
             double positionConversionFactor = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction();
-            encoder.setPositionConversionFactor(positionConversionFactor);
-            encoder.setVelocityConversionFactor(positionConversionFactor / 60.0);
+            
+            checkNeoError(encoder.setPositionConversionFactor(positionConversionFactor), "Failed to set drive NEO encoder pos conversion factor");
+            checkNeoError(encoder.setVelocityConversionFactor(positionConversionFactor / 60.0), "Failed to set drive NEO encoder vel conversion factor");
 
             return new ControllerImplementation(motor, encoder);
         }
@@ -106,7 +111,7 @@ public final class NeoDriveControllerFactoryBuilder
     {
         private final CANSparkMax       motor;
         private final RelativeEncoder   encoder;
-        private double                  currentVelocity;
+        private double                  currentSimVelocity, currentSimPosition;
 
         private ControllerImplementation(CANSparkMax motor, RelativeEncoder encoder) 
         {
@@ -114,6 +119,17 @@ public final class NeoDriveControllerFactoryBuilder
     
             this.motor = motor;
             this.encoder = encoder;
+                        
+            if (RobotBase.isSimulation()) 
+            {
+                // Note that the REV simulation does not work correctly. We have hacked
+                // a solution where we drive the sim through our code, not by reading the
+                // REV simulated encoder position and velocity, which are incorrect. However, 
+                // registering the motor controller with the REV sim is still needed.
+
+                // Add Neo to sim.
+                REVPhysicsSim.getInstance().addSparkMax(motor, DCMotor.getNEO(1));
+            }
         }
 
         @Override
@@ -130,8 +146,17 @@ public final class NeoDriveControllerFactoryBuilder
 
             // We track the "requested" velocity to use as a substitute for measured
             // velocity due to problems with Neo simulation not calculating a correct
-            // velocicty. TODO Fix Rev simulation to work correctly.
-            currentVelocity = velocity;
+            // velocity. We also compute the distance travelled for the same reason.
+            // TODO Fix Rev simulation to work correctly. The code below appears to
+            // work as a workaround but hard to say how well it models reality.
+            currentSimVelocity = velocity;
+            
+            double distancePer20Ms = currentSimVelocity / 50.0;
+
+            if (voltage > 0)
+                currentSimPosition += distancePer20Ms;
+            else
+                currentSimPosition -= distancePer20Ms;
         }
 
         public double getVoltage()
@@ -142,10 +167,10 @@ public final class NeoDriveControllerFactoryBuilder
         @Override
         public double getVelocity() 
         {
-            //if (RobotBase.isReal())
+            if (RobotBase.isReal())
                 return encoder.getVelocity();
-            //else
-            //    return currentVelocity;
+            else
+                return currentSimVelocity;
         }
 
         @Override
@@ -186,7 +211,10 @@ public final class NeoDriveControllerFactoryBuilder
         @Override
         public double getDistance() 
         {
-            return encoder.getPosition();
+            if (RobotBase.isReal())
+                return encoder.getPosition();
+            else
+                return currentSimPosition;
         }
     }
 }

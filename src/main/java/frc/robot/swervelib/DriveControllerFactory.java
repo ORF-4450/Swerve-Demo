@@ -10,10 +10,11 @@ public interface DriveControllerFactory<Controller extends DriveController, Driv
     {
         Util.consoleLog();
     
-        container.addNumber("Current Velocity", controller::getVelocity);
+        container.addNumber("3 Current Velocity", controller::getVelocity);
         //TODO: remove these items when done testing.
-        container.addNumber("Distance", controller::getDistance);
-        container.addNumber("Voltage", controller::getVoltage);
+        container.addNumber("2 Distance", controller::getDistance);
+        container.addNumber("1 Voltage", controller::getVoltage);
+        //container.addNumber("Drive Encoder position", () -> controller.getEncoder().getPosition()); 
     }
 
     default Controller create(

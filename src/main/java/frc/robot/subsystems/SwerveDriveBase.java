@@ -360,7 +360,8 @@ public class SwerveDriveBase extends SubsystemBase
 
   /**
    * Called on every scheduler loop. Updates odometry tracking of
-   * robot movement.
+   * robot movement. Also updates robot position on field2d widget
+   * used for simulation.
    */
   @Override
   public void periodic() 
@@ -450,7 +451,7 @@ public class SwerveDriveBase extends SubsystemBase
    */
   public void setOdometry(Pose2d pose) 
   {
-    // TODO: Fix this
+    // TODO: This is the old way of doing it (pre-2023).
     //m_odometry.resetPosition(pose, pose.getRotation());
 
     modulePositions[0] = m_frontLeftModule.getFieldPosition();
@@ -458,6 +459,9 @@ public class SwerveDriveBase extends SubsystemBase
     modulePositions[2] = m_backLeftModule.getFieldPosition();
     modulePositions[3] = m_backRightModule.getFieldPosition();
 
+    // TODO: The first parameter is gyro angle but found success using the
+    // pose angle, but this may not be the correct way to do this now that
+    // odometry is using position instead of velocity (as of 2023).
     m_odometry.resetPosition(pose.getRotation(), modulePositions, pose);
 
     m_navx.reset();
@@ -469,8 +473,10 @@ public class SwerveDriveBase extends SubsystemBase
   @Override
   public void simulationPeriodic() 
   {
+    // We are not using this now because the REV simulation does not work
+    // correctly. Will leave the code in place in case this issue gets fixed.
     // Assumes Neos. SIM for 500s not implemented.
-    if (robot.isEnabled()) REVPhysicsSim.getInstance().run();
+    //if (robot.isEnabled()) REVPhysicsSim.getInstance().run();
  
     // want to simulate navX gyro changing as robot turns
     // information available is radians per second and this happens every 20ms
@@ -565,7 +571,7 @@ public class SwerveDriveBase extends SubsystemBase
 
   /**
    * Set modules to point "forward". This is same as joystick
-   * to neutral position
+   * to neutral position with auto return to zero set true.
    */
   public void setModulesToForward()
   {
