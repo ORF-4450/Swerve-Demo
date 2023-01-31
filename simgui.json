@@ -18,7 +18,13 @@
           "length": 0.4000000059604645,
           "width": 0.4000000059604645
         },
-        "image": "C:\\Users\\rcorn\\workspace\\FRC Java\\Swerve-Demo\\resources\\2022-field.png",
+        "bottom": 544,
+        "height": 8.013679504394531,
+        "image": "C:\\Users\\rcorn\\workspace\\FRC Java\\Swerve-Demo\\resources\\2023-field.png",
+        "left": 46,
+        "right": 1088,
+        "top": 36,
+        "width": 16.541748046875,
         "window": {
           "visible": true
         }

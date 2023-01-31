@@ -237,7 +237,7 @@ public class SwerveDriveBase extends SubsystemBase
     //setModulesToAbsolute();
 
     // Set starting position on field.
-    setOdometry(new Pose2d(1.03, 2.825, new Rotation2d(0)));
+    setOdometry(new Pose2d(2.094, 2.691, new Rotation2d(0)));
 
     // Initialze drive by issuing a no movement drive command.
     drive(0, 0, 0);
